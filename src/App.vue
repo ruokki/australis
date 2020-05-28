@@ -17,7 +17,7 @@
       </div>
       <q-list separator>
           <q-item>
-            <h4>Mon compte</h4>
+            <h5>Mon compte</h5>
           </q-item>
           <q-item clickable>
             <q-item-section avatar>
@@ -50,7 +50,7 @@
             <q-item-section>Administration</q-item-section>
           </q-item>
       </q-list>
-      <h4>Médiathèque</h4>
+      <h5>Médiathèque</h5>
       <q-list separator>
           <q-expansion-item 
               v-for="main in categories" 
@@ -168,7 +168,7 @@ export default {
 </script>
 
 <style>
-h4 {
+h5 {
   margin: 10px;
 }
 
