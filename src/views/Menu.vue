@@ -4,7 +4,7 @@
         <img id="logo" src="../assets/logo.png" />
       </div>
       <div class="row justify-center">
-          <router-link class="col text-center text-h4" to="/home">
+          <router-link class="col text-center text-h4" to="/">
             <q-icon name="home" />
           </router-link>
           <router-link class="col text-center text-h4" to="/">
