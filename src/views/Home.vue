@@ -1,6 +1,41 @@
 <template>
-  <div>
-    <div class="row">
+  <div class="q-pa-md">
+    <div class="row q-gutter-x-md">
+      <div class="col">Mon joli chart</div>
+      <div class="col">
+          <q-card class="bg-info">
+            <q-card-section>
+              <div class="text-h6 text-center">Ma médiathèque</div>
+            </q-card-section>
+            <q-tabs
+              v-model="tab"
+              dense
+              active-color="accent"
+              indicator-color="accent"
+              align="justify"
+              narrow-indicator
+            >
+              <q-tab v-for="one in categories" :key="one.id" :name="one.name" :label="one.name" :ripple="{ color : 'accent' }" />
+            </q-tabs>
+
+            <q-tab-panels v-model="tab" animated>
+              <q-tab-panel v-for="one in categories" :key="one.id" :name="one.name">
+                 <q-list dense>
+                   <q-item v-for="sub in one.children" :key="sub.id">
+                      <q-item-section>{{ sub.name }}</q-item-section>
+                      <q-item-section class="text-center">
+                        {{ itemsBySub[sub.id] ? itemsBySub[sub.id] : 0 }}
+                      </q-item-section>
+                   </q-item>
+                 </q-list>
+              </q-tab-panel>
+            </q-tab-panels>
+
+          </q-card>
+      </div>
+    </div>
+
+    <div class="row q-gutter-x-md">
       <div class="col">
         <q-table
           title="Demandes en attente"
@@ -8,7 +43,9 @@
           :data="lends"
           :columns="lendCols"
           row-key="borrow_id"
-        />
+        >
+          <template v-slot:bottom></template>
+        </q-table>
       </div>
       <div class="col">
         <q-table
@@ -17,8 +54,13 @@
           :data="borrows"
           :columns="borrowCols"
           row-key="borrow_id"
-        />
+        >
+          <template v-slot:bottom></template>
+        </q-table>
       </div>
+    </div>
+    <div class="row">
+      
     </div>
   </div>
 </template>
@@ -26,10 +68,30 @@
 <script>
 import moment from 'moment';
 
+
 export default {
   name: 'Home',
+  computed: {
+    categories() {
+      return this.$store.getters.getAllCategories;
+    }
+  },
+  beforeMount() {
+    this.tab = Array.isArray(this.categories) ? Array.from(this.categories)[0].name : "";
+  },
   data() {
     return {
+      tab: "",
+      itemsBySub: {
+        11: 8,
+        12: 5,
+        13: 2,
+        21: 5,
+        22: 8,
+        23: 12
+      },
+
+      // Définition des tableaux
       lendCols: [
         { name: "item", label: "Item", field: "item_name"  },
         { name: "lender", label: "Possesseur", field: "user_name"  },
@@ -41,7 +103,7 @@ export default {
         { name: "end", label: "Fin", field: "borrow_date_end", format: (val) => moment(val).format('DD/MM/YYYY') }
       ],
 
-
+      // Data des tableaux
       lends: [
         {
           borrow_id: 1,
@@ -110,3 +172,9 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.row {
+  height: 33%;
+}
+
+</style>
