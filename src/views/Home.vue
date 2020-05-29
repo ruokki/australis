@@ -1,5 +1,6 @@
 <template>
   <q-page class="q-pa-md column">
+    <!-- Première ligne : Chart et Répartition de la médiathèque -->
     <div class="row q-gutter-x-md">
       <div class="col">Mon joli chart</div>
       <div class="col">
@@ -34,6 +35,7 @@
       </div>
     </div>
 
+    <!-- Deuxième ligne : Liste des dernières demandes et des emprunts en cours -->
     <div class="row q-gutter-x-md">
       <div class="col">
         <q-table
@@ -58,18 +60,23 @@
         </q-table>
       </div>
     </div>
+
+    <!-- Troisième ligne : Liste des derniers items récupérés -->
     <div class="row">
-      
+      <ItemList />
     </div>
   </q-page>
 </template>
 
 <script>
 import moment from 'moment';
-
+import ItemList from './ItemList.vue';
 
 export default {
   name: 'Home',
+  components: {
+    ItemList
+  },
   computed: {
     categories() {
       return this.$store.getters.getAllCategories;
