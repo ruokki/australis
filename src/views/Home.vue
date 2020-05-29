@@ -1,5 +1,5 @@
 <template>
-  <div class="q-pa-md">
+  <q-page class="q-pa-md column">
     <div class="row q-gutter-x-md">
       <div class="col">Mon joli chart</div>
       <div class="col">
@@ -30,7 +30,6 @@
                  </q-list>
               </q-tab-panel>
             </q-tab-panels>
-
           </q-card>
       </div>
     </div>
@@ -62,7 +61,7 @@
     <div class="row">
       
     </div>
-  </div>
+  </q-page>
 </template>
 
 <script>
@@ -134,7 +133,7 @@ export default {
           item_name: "Truc du truc",
           user_name: "Jean michel",
           borrow_duration: 1
-        },
+        }
       ],
       borrows: [
         {
@@ -174,7 +173,6 @@ export default {
 </script>
 <style lang="scss" scoped>
 .row {
-  height: 33%;
+  flex: 1;
 }
-
 </style>
