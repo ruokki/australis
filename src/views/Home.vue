@@ -62,8 +62,8 @@
     </div>
 
     <!-- Troisième ligne : Liste des derniers items récupérés -->
-    <div class="row">
-      <ItemList />
+    <div id="list" class="row">
+        <ItemList />
     </div>
   </q-page>
 </template>
@@ -181,5 +181,9 @@ export default {
 <style lang="scss" scoped>
 .row {
   flex: 1;
+}
+
+#list {
+  flex: 3;
 }
 </style>

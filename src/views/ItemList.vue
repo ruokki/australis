@@ -1,8 +1,7 @@
 <template>
     <q-scroll-area class="full-width">
         <Item v-for="one in items" :key="one.id"
-            :img="one.img" 
-            :name="one.name"
+            :item="one" 
         />
     </q-scroll-area>
 </template>
@@ -20,17 +19,21 @@ export default {
                 {
                     id: 1,
                     img: "https://picsum.photos/300/300",
-                    name: "Item 1"
+                    name: "Item 1",
+                    icon: "music_note"
                 },
                 {
                     id: 2,
                     img: "https://picsum.photos/300/500",
-                    name: "Item 2"
+                    name: "Item 2",
+                    icon: "movie",
+                    possessed: true
                 },
                 {
                     id: 3,
                     img: "https://picsum.photos/500/300",
-                    name: "Item 3"
+                    name: "Item 3",
+                    icon: "movie"
                 },
                 {
                     id: 4,
@@ -40,12 +43,14 @@ export default {
                 {
                     id: 5,
                     img: "https://picsum.photos/300/300",
-                    name: "Item 6"
+                    name: "Item 6",
+                    icon: "movie"
                 },
                 {
                     id: 6,
                     img: "https://picsum.photos/300/300",
-                    name: "Item 8"
+                    name: "Item 8",
+                    icon: "movie"
                 },
                 {
                     id: 7,
@@ -55,7 +60,8 @@ export default {
                 {
                     id: 8,
                     img: "https://picsum.photos/300/300",
-                    name: "Item 8"
+                    name: "Item 8",
+                    icon: "movie"
                 },
                 {
                     id: 9,
