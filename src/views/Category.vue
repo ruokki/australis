@@ -27,25 +27,37 @@ export default {
             icon: ""
         };
     },
+    methods: {
+        updateCategory: function() {
+            let category = this.$store.getters.getCategory(this.$route.params.main);
+            this.mainName = category.name;
+            this.icon = category.icon;
+
+            let sub;
+            for(var i in category.children) {
+                sub = category.children[i];
+                if(sub.id == this.$route.params.sub) {
+                    this.subName = sub.name;
+                    break;
+                }
+            }
+        }
+    },
+    watch: {
+        '$route.params.main': function() {
+            this.updateCategory();
+        },
+        '$route.params.sub': function() {
+            this.updateCategory();
+        },
+    },
     mounted() {
         /**
          * @TODO Récupération des items correspondants à la catégorie/sous catégorie sélectionnés
          * @param Catégorie principale $route.params.main
          * @param Catégorie enfante $route.params.sub
          */
-        let category = this.$store.getters.getCategory(this.$route.params.main);
-        this.mainName = category.name;
-        this.icon = category.icon;
-
-        let sub;
-        for(var i in category.children) {
-            sub = category.children[i];
-            if(sub.id == this.$route.params.sub) {
-                this.subName = sub.name;
-                break;
-            }
-        }
-
+        this.updateCategory();
     }
 }
 </script>
