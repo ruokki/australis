@@ -10,8 +10,17 @@
         <div class="front fit column justify-around item-center">
             <div>
                 <div class="text-center text-h5">{{ item.name }}</div>
-                <div class="text-center" v-if="item.icon">
-                    <q-icon size="md" :name="item.icon" />
+                <div class="text-center" v-if="item.category_icon">
+                    <q-icon size="md" :name="item.category_icon" >
+                        <q-tooltip 
+                            v-if="item.category_path"
+                            :transition-show="tooltip.transition"
+                            :transition-hide="tooltip.transition"
+                            :content-class="tooltip.class"
+                        >
+                            {{ item.category_path }}
+                        </q-tooltip>
+                    </q-icon>
                 </div>
             </div>
             <div class="absolute-bottom-right cursor-pointer actions">

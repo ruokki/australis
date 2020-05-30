@@ -20,20 +20,23 @@ export default {
                     id: 1,
                     img: "https://picsum.photos/300/300",
                     name: "Item 1",
-                    icon: "music_note"
+                    category_icon: "music_note",
+                    category_path: "Audio - Album"
                 },
                 {
                     id: 2,
                     img: "https://picsum.photos/300/500",
                     name: "Item 2",
-                    icon: "movie",
+                    category_icon: "movie",
+                    category_path: "Vidéo - Anime",
                     possessed: true
                 },
                 {
                     id: 3,
                     img: "https://picsum.photos/500/300",
                     name: "Item 3",
-                    icon: "movie",
+                    category_icon: "movie",
+                    category_path: "Vidéo - Film",
                     possessed: true,
                     borrowable: false
                 },
