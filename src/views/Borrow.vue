@@ -73,14 +73,14 @@
                                 </q-icon>
                             </div>
                             <div v-else-if="props.row.borrow_state == 'TB'">
-                                <q-icon name="weekend" size="sm">
+                                <q-icon name="local_shipping" size="sm" class="cursor-pointer">
                                     <q-tooltip
                                         :transition-show="tooltipTransition"
                                         :transition-hide="tooltipTransition"
                                         :content-class="tooltipClass"
                                         anchor="center left" self="center right"
                                     >
-                                        Item prêté
+                                        Confirmer prêt
                                     </q-tooltip>
                                 </q-icon>
                             </div>
