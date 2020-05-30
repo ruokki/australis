@@ -89,7 +89,16 @@ export default new Vuex.Store({
         ]
     },
     getters: {
-        getAllCategories:(state) => state.categories
+        getAllCategories:(state) => state.categories,
+        getCategory:(state) => (id) => {
+            let one;
+            for(var i in state.categories) {
+                one = state.categories[i];
+                if(one.id == id) {
+                    return one;
+                }
+            }
+        }
     },
     mutations: {},
     actions: {},

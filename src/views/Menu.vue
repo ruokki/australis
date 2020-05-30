@@ -75,7 +75,7 @@
               :label="main.name"
               group="media">
               <q-list separator>
-                <q-item v-for="child in main.children" :key="child.id" clickable v-ripple>
+                <q-item v-for="child in main.children" :key="child.id" :to="'/category/' + main.id + '/' + child.id" clickable v-ripple>
                   <q-item-section>{{ child.name }}</q-item-section>
                 </q-item>
               </q-list>

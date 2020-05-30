@@ -1,5 +1,5 @@
 <template>
-    <q-scroll-area class="full-width">
+    <q-scroll-area class="row full-width list-item" >
         <Item v-for="one in items" :key="one.id"
             :item="one" 
         />
@@ -12,6 +12,9 @@ export default {
     name: "ItemList",
     components: {
         Item
+    },
+    props: {
+        fit: Boolean
     },
     data() {
         return {
