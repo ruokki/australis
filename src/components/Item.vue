@@ -21,6 +21,15 @@
                             {{ item.category_path }}
                         </q-tooltip>
                     </q-icon>
+                    <q-icon size="md" name="shopping_cart" v-if="!item.possessed" >
+                        <q-tooltip 
+                            :transition-show="tooltip.transition"
+                            :transition-hide="tooltip.transition"
+                            :content-class="tooltip.class"
+                        >
+                            Emprunter l'item
+                        </q-tooltip>
+                    </q-icon>
                 </div>
             </div>
             <div class="absolute-bottom-right cursor-pointer actions">
