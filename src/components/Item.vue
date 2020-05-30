@@ -1,12 +1,13 @@
 <template>
     <div class="item" 
+        :class="{'hovered' : front }"
         @mouseover="front = true"
         @mouseleave="front = false"
     >
         <div class="background">
             <q-img :src="item.img" :ratio="1" />
         </div>
-        <div v-show="front" class="front fit column justify-around item-center">
+        <div class="front fit column justify-around item-center">
             <div>
                 <div class="text-center text-h5">{{ item.name }}</div>
                 <div class="text-center" v-if="item.icon">
@@ -50,13 +51,20 @@ export default {
     margin-right: 20px;
     margin-bottom: 40px;
 
+    &.hovered {
+        .front {
+            opacity: 0.8;
+        }
+    }
+
     .front {
         position: absolute;
         top: 0;
         left: 0;
         background: white;
-        opacity: 0.8;
+        opacity: 0;
         z-index: 4;
+        transition: opacity .35s;
 
         .actions {
             padding: 5px 0;
