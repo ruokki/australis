@@ -18,12 +18,22 @@
           <q-item>
             <h5>Mon compte</h5>
           </q-item>
-          <q-item clickable>
-            <q-item-section avatar>
-              <q-icon name="storage" />
-            </q-item-section>
-            <q-item-section>Ma collection</q-item-section>
-          </q-item>
+          <q-expansion-item 
+              icon="storage"
+              label="Ma collection"
+              group="account">
+              <q-list separator>
+                <q-item clickable v-ripple>
+                  <q-item-section>Mes items</q-item-section>
+                </q-item>
+                <q-item clickable v-ripple>
+                  <q-item-section>Créer un item</q-item-section>
+                </q-item>
+                <q-item clickable v-ripple>
+                  <q-item-section>Créer une collection</q-item-section>
+                </q-item>
+              </q-list>
+          </q-expansion-item>
           <q-item clickable>
             <q-item-section avatar>
               <q-icon name="favorite" />
@@ -36,12 +46,19 @@
             </q-item-section>
             <q-item-section>Mes emprunts</q-item-section>
           </q-item>
-          <q-item clickable>
-            <q-item-section avatar>
-              <q-icon name="work" />
-            </q-item-section>
-            <q-item-section>Prêts</q-item-section>
-          </q-item>
+          <q-expansion-item 
+              icon="work"
+              label="Prêts"
+              group="account">
+              <q-list separator>
+                <q-item clickable v-ripple>
+                  <q-item-section>Prêts en cours</q-item-section>
+                </q-item>
+                <q-item clickable v-ripple>
+                  <q-item-section>Historique des prêts</q-item-section>
+                </q-item>
+              </q-list>
+          </q-expansion-item>
           <q-item clickable>
             <q-item-section avatar>
               <q-icon name="verified_user" />
