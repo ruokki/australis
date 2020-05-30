@@ -21,7 +21,7 @@
                             {{ item.category_path }}
                         </q-tooltip>
                     </q-icon>
-                    <q-icon size="md" name="shopping_cart" v-if="!item.possessed" >
+                    <q-icon v-if="!item.possessed" @click="borrowMe" size="md" class="cursor-pointer" name="shopping_cart" >
                         <q-tooltip 
                             :transition-show="tooltip.transition"
                             :transition-hide="tooltip.transition"
@@ -43,16 +43,7 @@
                             Modifier l'item
                         </q-tooltip>
                     </q-icon>
-                    <q-icon size="sm" v-if="item.borrowable" name="lock_open" >
-                        <q-tooltip 
-                            :transition-show="tooltip.transition"
-                            :transition-hide="tooltip.transition"
-                            :content-class="tooltip.class"
-                        >
-                            Prêts interdits
-                        </q-tooltip>
-                    </q-icon>
-                    <q-icon size="sm" v-else name="lock">
+                    <q-icon size="sm" v-if="!item.borrowable" name="lock_open" @click="setBorrow(true)" >
                         <q-tooltip 
                             :transition-show="tooltip.transition"
                             :transition-hide="tooltip.transition"
@@ -61,7 +52,16 @@
                             Prêts autorisés
                         </q-tooltip>
                     </q-icon>
-                    <q-icon size="sm" name="check_box">
+                    <q-icon size="sm" v-else name="lock" @click="setBorrow(false)">
+                        <q-tooltip 
+                            :transition-show="tooltip.transition"
+                            :transition-hide="tooltip.transition"
+                            :content-class="tooltip.class"
+                        >
+                            Prêts interdits
+                        </q-tooltip>
+                    </q-icon>
+                    <q-icon size="sm" name="check_box" @click="toCollection(false)">
                         <q-tooltip 
                             :transition-show="tooltip.transition"
                             :transition-hide="tooltip.transition"
@@ -72,7 +72,7 @@
                     </q-icon>
                 </div>
                 <div v-else>
-                    <q-icon size="sm" name="check_box_outline_blank">
+                    <q-icon size="sm" name="check_box_outline_blank" @click="toCollection(true)">
                         <q-tooltip 
                             :transition-show="tooltip.transition"
                             :transition-hide="tooltip.transition"
@@ -91,6 +91,30 @@ export default {
     name: "Item",
     props: {
         item: Object
+    },
+    methods: {
+        // Envoi d'une demande de prêt
+        borrowMe() {
+            /**
+             * @TODO Envoyer une requête pour faire un prêt
+             * id : this.item.id
+             */
+            },
+        // Définit si l'item est empruntable ou non
+        setBorrow(borrowable) {
+            this.item.borrowable = borrowable;
+            /**
+             * @TODO Envoyer requête pour enregistrer l'état "Empruntable"
+             */
+            },
+        toCollection(possessed) {
+            this.item.possessed = possessed;
+            /**
+             * @TODO Envoyer une requête pour retirer l'item de la collection du user
+             * id : this.item.id
+             */
+        }
+
     },
     data() {
         return {
