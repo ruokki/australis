@@ -33,7 +33,9 @@ export default {
                     id: 3,
                     img: "https://picsum.photos/500/300",
                     name: "Item 3",
-                    icon: "movie"
+                    icon: "movie",
+                    possessed: true,
+                    borrowable: false
                 },
                 {
                     id: 4,

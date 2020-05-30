@@ -14,15 +14,55 @@
                     <q-icon size="md" :name="item.icon" />
                 </div>
             </div>
-            <div class="absolute-bottom-right actions">
+            <div class="absolute-bottom-right cursor-pointer actions">
                 <div v-if="item.possessed">
-                    <q-icon size="sm" name="edit" />
-                    <q-icon size="sm" v-if="item.borrowable" name="lock_open" />
-                    <q-icon size="sm" v-else name="lock" />
-                    <q-icon size="sm" name="check_box" />
+                    <q-icon size="sm" name="edit" >
+                        <q-tooltip 
+                            :transition-show="tooltip.transition"
+                            :transition-hide="tooltip.transition"
+                            :content-class="tooltip.class"
+                        >
+                            Modifier l'item
+                        </q-tooltip>
+                    </q-icon>
+                    <q-icon size="sm" v-if="item.borrowable" name="lock_open" >
+                        <q-tooltip 
+                            :transition-show="tooltip.transition"
+                            :transition-hide="tooltip.transition"
+                            :content-class="tooltip.class"
+                        >
+                            Prêts interdits
+                        </q-tooltip>
+                    </q-icon>
+                    <q-icon size="sm" v-else name="lock">
+                        <q-tooltip 
+                            :transition-show="tooltip.transition"
+                            :transition-hide="tooltip.transition"
+                            :content-class="tooltip.class"
+                        >
+                            Prêts autorisés
+                        </q-tooltip>
+                    </q-icon>
+                    <q-icon size="sm" name="check_box">
+                        <q-tooltip 
+                            :transition-show="tooltip.transition"
+                            :transition-hide="tooltip.transition"
+                            :content-class="tooltip.class"
+                        >
+                            Retirer de ma collection
+                        </q-tooltip>
+                    </q-icon>
                 </div>
                 <div v-else>
-                    <q-icon size="sm" name="check_box_outline_blank" />
+                    <q-icon size="sm" name="check_box_outline_blank">
+                        <q-tooltip 
+                            :transition-show="tooltip.transition"
+                            :transition-hide="tooltip.transition"
+                            :content-class="tooltip.class"
+                        >
+                            Ajouter à ma collection
+                        </q-tooltip>
+                    </q-icon>
                 </div>
             </div>
         </div>
@@ -36,6 +76,10 @@ export default {
     },
     data() {
         return {
+            tooltip: {
+                class: "bg-primary text-body1",
+                transition: "scale"
+            },
             front: false
         }
     }
