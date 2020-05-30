@@ -14,18 +14,18 @@
                     <q-icon size="md" :name="item.category_icon" >
                         <q-tooltip 
                             v-if="item.category_path"
-                            :transition-show="tooltip.transition"
-                            :transition-hide="tooltip.transition"
-                            :content-class="tooltip.class"
+                            :transition-show="tooltipTransition"
+                            :transition-hide="tooltipTransition"
+                            :content-class="tooltipClass"
                         >
                             {{ item.category_path }}
                         </q-tooltip>
                     </q-icon>
                     <q-icon v-if="!item.possessed" @click="borrowMe" size="md" class="cursor-pointer" name="shopping_cart" >
                         <q-tooltip 
-                            :transition-show="tooltip.transition"
-                            :transition-hide="tooltip.transition"
-                            :content-class="tooltip.class"
+                            :transition-show="tooltipTransition"
+                            :transition-hide="tooltipTransition"
+                            :content-class="tooltipClass"
                         >
                             Emprunter l'item
                         </q-tooltip>
@@ -36,36 +36,36 @@
                 <div v-if="item.possessed">
                     <q-icon size="sm" name="edit" >
                         <q-tooltip 
-                            :transition-show="tooltip.transition"
-                            :transition-hide="tooltip.transition"
-                            :content-class="tooltip.class"
+                            :transition-show="tooltipTransition"
+                            :transition-hide="tooltipTransition"
+                            :content-class="tooltipClass"
                         >
                             Modifier l'item
                         </q-tooltip>
                     </q-icon>
                     <q-icon size="sm" v-if="!item.borrowable" name="lock_open" @click="setBorrow(true)" >
                         <q-tooltip 
-                            :transition-show="tooltip.transition"
-                            :transition-hide="tooltip.transition"
-                            :content-class="tooltip.class"
+                            :transition-show="tooltipTransition"
+                            :transition-hide="tooltipTransition"
+                            :content-class="tooltipClass"
                         >
                             Prêts autorisés
                         </q-tooltip>
                     </q-icon>
                     <q-icon size="sm" v-else name="lock" @click="setBorrow(false)">
                         <q-tooltip 
-                            :transition-show="tooltip.transition"
-                            :transition-hide="tooltip.transition"
-                            :content-class="tooltip.class"
+                            :transition-show="tooltipTransition"
+                            :transition-hide="tooltipTransition"
+                            :content-class="tooltipClass"
                         >
                             Prêts interdits
                         </q-tooltip>
                     </q-icon>
                     <q-icon size="sm" name="check_box" @click="toCollection(false)">
                         <q-tooltip 
-                            :transition-show="tooltip.transition"
-                            :transition-hide="tooltip.transition"
-                            :content-class="tooltip.class"
+                            :transition-show="tooltipTransition"
+                            :transition-hide="tooltipTransition"
+                            :content-class="tooltipClass"
                         >
                             Retirer de ma collection
                         </q-tooltip>
@@ -74,9 +74,9 @@
                 <div v-else>
                     <q-icon size="sm" name="check_box_outline_blank" @click="toCollection(true)">
                         <q-tooltip 
-                            :transition-show="tooltip.transition"
-                            :transition-hide="tooltip.transition"
-                            :content-class="tooltip.class"
+                            :transition-show="tooltipTransition"
+                            :transition-hide="tooltipTransition"
+                            :content-class="tooltipClass"
                         >
                             Ajouter à ma collection
                         </q-tooltip>
@@ -87,8 +87,16 @@
     </div>
 </template>
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
     name: "Item",
+    computed: {
+        ...mapGetters([
+            'tooltipTransition',
+            'tooltipClass'
+        ]),
+    },
     props: {
         item: Object
     },
@@ -118,10 +126,6 @@ export default {
     },
     data() {
         return {
-            tooltip: {
-                class: "bg-primary text-body1",
-                transition: "scale"
-            },
             front: false
         }
     }

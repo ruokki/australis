@@ -5,6 +5,10 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+        tooltip: {
+            transition: "scale",
+            class: "bg-primary text-body1"
+        },
         categories: [
             {
                 name: "Audio",
@@ -98,7 +102,9 @@ export default new Vuex.Store({
                     return one;
                 }
             }
-        }
+        },
+        tooltipTransition: (state) => state.tooltip.transition,
+        tooltipClass: (state) => state.tooltip.class,
     },
     mutations: {},
     actions: {},
