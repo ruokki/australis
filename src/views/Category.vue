@@ -41,6 +41,12 @@ export default {
                     break;
                 }
             }
+
+            /**
+             * @TODO Récupération des items correspondants à la catégorie/sous catégorie sélectionnés
+             * @param Catégorie principale $route.params.main
+             * @param Catégorie enfante $route.params.sub
+             */
         }
     },
     watch: {
@@ -52,11 +58,6 @@ export default {
         },
     },
     mounted() {
-        /**
-         * @TODO Récupération des items correspondants à la catégorie/sous catégorie sélectionnés
-         * @param Catégorie principale $route.params.main
-         * @param Catégorie enfante $route.params.sub
-         */
         this.updateCategory();
     }
 }

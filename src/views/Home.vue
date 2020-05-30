@@ -101,7 +101,7 @@ export default {
       lendCols: [
         { name: "item", label: "Item", field: "item_name"  },
         { name: "lender", label: "Possesseur", field: "user_name"  },
-        { name: "duration", label: "Durée", field: "borrow_duration",  format: (val) =>  val + " jour" + (val > 1 ? "s" : "" ) },
+        { name: "duration", label: "Durée", field: "borrow_duration", format: (val) =>  val + " jour" + (val > 1 ? "s" : "" ) },
       ],
       borrowCols: [
         { name: "item", label: "Item", field: "item_name"  },

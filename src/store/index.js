@@ -90,7 +90,25 @@ export default new Vuex.Store({
                     },
                 ]
             }
-        ]
+        ],
+        borrowSate: {
+            lender: {
+                'WA': 'En attente de réponse',
+                'TB': 'À prêter',
+                'BO': 'Item prété',
+                'AR': 'Rallonge demandée',
+                'GB': 'Item récupéré',
+                'DE': 'Demande refusée'
+            },
+            borrower: {
+                'WA': 'En attente de réponse',
+                'TB': 'Demande acceptée',
+                'BO': 'Emprunt en cours',
+                'AR': 'Rallonge demandée',
+                'GB': 'Item rendu',
+                'DE': 'Demande refusée'
+            }
+        }
     },
     getters: {
         getAllCategories:(state) => state.categories,
@@ -105,6 +123,7 @@ export default new Vuex.Store({
         },
         tooltipTransition: (state) => state.tooltip.transition,
         tooltipClass: (state) => state.tooltip.class,
+        getBorrowSate: (state) => (type) => state.borrowSate[type]
     },
     mutations: {},
     actions: {},

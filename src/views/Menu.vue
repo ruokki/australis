@@ -40,7 +40,7 @@
             </q-item-section>
             <q-item-section>Ma wishlist</q-item-section>
           </q-item>
-          <q-item clickable>
+          <q-item to="/borrow/borrower" clickable>
             <q-item-section avatar>
               <q-icon name="pan_tool" />
             </q-item-section>
@@ -51,10 +51,10 @@
               label="Prêts"
               group="account">
               <q-list separator>
-                <q-item clickable v-ripple>
+                <q-item to="/borrow/lender" clickable v-ripple>
                   <q-item-section>Prêts en cours</q-item-section>
                 </q-item>
-                <q-item clickable v-ripple>
+                <q-item to="/borrow/oldLent" clickable v-ripple>
                   <q-item-section>Historique des prêts</q-item-section>
                 </q-item>
               </q-list>
