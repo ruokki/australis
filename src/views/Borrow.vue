@@ -2,6 +2,7 @@
     <q-page>
         <q-toolbar class="bg-primary text-white">
             <q-toolbar-title>{{ getTitle }}</q-toolbar-title>
+            <q-btn v-if="$route.params.type != 'oldLent'" flat :label="getHelp" icon-right="help" @click="modalInfo = true"></q-btn>
         </q-toolbar>
         <div class="q-pa-sm">
             <q-table 
@@ -95,6 +96,16 @@
                                         Modifier la date de fin
                                     </q-tooltip>
                                 </q-icon>
+                                <q-icon name="pan_tool"  size="sm" class="cursor-pointer" >
+                                    <q-tooltip
+                                        :transition-show="tooltipTransition"
+                                        :transition-hide="tooltipTransition"
+                                        :content-class="tooltipClass"
+                                        anchor="center left" self="center right"
+                                    >
+                                        Terminer le prêt
+                                    </q-tooltip>
+                                </q-icon>
                             </div>
                             <div v-else-if="props.row.borrow_state == 'AR'">
                                 <q-icon name="visibility"  size="sm" class="cursor-pointer" >
@@ -113,6 +124,81 @@
                     </q-tr>
                 </template>
             </q-table>
+
+             <q-dialog v-model="modalInfo" full-width>
+                <q-card v-if="$route.params.type == 'lender'">
+                    <q-card-section>
+                        <div class="text-h6">Fonctionnement des prêts</div>
+                    </q-card-section>
+
+                    <q-card-section class="q-pt-none">
+                        <p class="text-body1">Les prêts fonctionnent de la façon suivante :</p>
+                        <ul class="text-body1">
+                            <li>Un autre utilisateur effectue une demande concernant un de vos items.</li>
+                            <li>Cette demande apparait dans votre liste avec le statut "{{ getBorrowSate(this.$route.params.type)["WA"] }}".</li>
+                            <li>Vous choisissez si oui ou non, vous voulez prêter l'item.</li>
+                            <li>
+                                Si vous décidez de le prêter, l'item passe en état "{{ getBorrowSate(this.$route.params.type)["TB"] }}". A vous définir avec 
+                                l'autre utilisateur où, quand et pour combien de temps vous allez lui transmettre l'item.
+                            </li>
+                            <li>
+                                Une fois transmis, vous devez revenir sur cette interface et indiquer que c'est l'autre utilisateur qui l'a
+                                en sa possession en cliquant sur l'icone <q-icon name="local_shipping" size="sm" />
+                            </li>
+                            <li>
+                                Indiquer la durée du prêt. Une notification sera affiché pour l'emprunteur une semaine avant
+                                la date de fin du prêt. Il est possible d'allonger la durée du prêt à l'aide de l'icone <q-icon name="autorenew" size="sm" />
+                            </li>
+                            <li>Il est possible de terminer le prêt avant la date limite.</li>
+                            <li>
+                                Une fois le prêt terminé et l'item rendu, cliquer sur l'icone <q-icon name="pan_tool" size="sm" /> pour terminer le prêt
+                                et rendre l'item à nouveau disponible. <br />
+                                NE TERMINER PAS UN PRÊT TANT QUE VOUS N'AVEZ PAS RÉCUPÉRÉ L'ITEM
+                            </li>
+                        </ul>
+                    </q-card-section>
+
+                    <q-card-actions align="right">
+                        <q-btn flat label="OK" color="primary" v-close-popup />
+                    </q-card-actions>
+                </q-card>
+                <q-card v-if="$route.params.type == 'borrower'">
+                    <q-card-section>
+                        <div class="text-h6">Fonctionnement des emprunts</div>
+                    </q-card-section>
+
+                    <q-card-section class="q-pt-none">
+                        <p class="text-body1">Les emprunts fonctionnent de la façon suivante :</p>
+                        <ul class="text-body1">
+                            <li>Vous effectuez une demande de prêt</li>
+                            <li>Le propriétaire reçoit une demande sur son compte. Il dispose de 2 options :</li>
+                            <li>
+                                Soit il accepte et votre demande passe en état "{{ getBorrowSate(this.$route.params.type)["TB"] }}"
+                            </li>
+                            <li>
+                                Soit il refuse votre demande et indique un motif.
+                            </li>
+                            <li>
+                                En cas d'acceptation, à vous de régler avec le propriétaire le moment et l'endroit où il vous transmettra l'item ainsi que la durée du prêt
+                            </li>
+                            <li>
+                                Une fois transmis, le propriétaire passe la demande en état "{{ getBorrowSate(this.$route.params.type)["BO"] }}" et indique la durée convenu.<br />
+                                Une notification s'affichera une semaine avant la fin du prêt sur le menu "Mes emprunts" indiquant le nombre d'item arrivant à échéance.
+                            </li>
+                            <li>
+                                Il est possible de demander une rallonge (ou un raccourcissement) de la durée du prêt à l'aide de l'icone <q-icon name="autorenew" size="sm" />
+                            </li>
+                            <li>
+                                Une fois l'item rendu, le priopriétaire passe la demande en état "{{ getBorrowSate(this.$route.params.type)["GB"] }}" et celle-ci disparait de votre interface.
+                            </li>
+                        </ul>
+                    </q-card-section>
+
+                    <q-card-actions align="right">
+                        <q-btn flat label="OK" color="primary" v-close-popup />
+                    </q-card-actions>
+                </q-card>
+            </q-dialog>
         </div>
     </q-page>
 </template>
@@ -129,13 +215,18 @@ export default {
         ]),
         getTitle: function() {
             return this.titles[this.$route.params.type];
-        }
+        },
+        getHelp: function() {
+            return this.help[this.$route.params.type];
+        },
     },
     methods: {
 
     },
     data() {
         return {
+            modalInfo: false,
+
             // Id du borrow pour la modal ouverte
             borrowId: 0,
 
@@ -143,6 +234,11 @@ export default {
                 borrower: "Mes emprunts",
                 lender: "Mes demandes de prêt",
                 oldLent: "Historique des prêts",
+            },
+            help: {
+                borrower: "Fonctionnement des emprunts",
+                lender: "Fonctionnement des prêts",
+                oldLent: "",
             },
             cols:  [
                 { name: "item", label: "Item", field: "item_name"  },
