@@ -4,19 +4,19 @@
     <div class="row q-gutter-x-md">
       <div class="col">Mon joli chart</div>
       <div class="col">
-          <q-card class="bg-info">
+          <q-card class="bg-primary">
             <q-card-section>
               <div class="text-h6 text-center">Ma médiathèque</div>
             </q-card-section>
             <q-tabs
               v-model="tab"
               dense
-              active-color="accent"
-              indicator-color="accent"
+              active-color="white"
+              indicator-color="white"
               align="justify"
               narrow-indicator
             >
-              <q-tab v-for="one in categories" :key="one.id" :name="one.name" :label="one.name" :ripple="{ color : 'accent' }" />
+              <q-tab v-for="one in categories" :key="one.id" :name="one.name" :label="one.name" />
             </q-tabs>
 
             <q-tab-panels v-model="tab" animated>
