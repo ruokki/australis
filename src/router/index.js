@@ -20,6 +20,12 @@ Vue.use(VueRouter)
     name: 'Borrow',
     props: true,
     component: () => import('../views/Borrow.vue')
+  },
+  {
+    path: '/item/:id',
+    name: 'Item',
+    props: true,
+    component: () => import('../views/Item.vue')
   }
 ]
 
