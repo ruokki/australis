@@ -17,6 +17,10 @@ import ItemList from './ItemList.vue';
 
 export default {
     name: "Category",
+    props: [
+        'main',
+        'sub'
+    ],
     components: {
         ItemList
     },
@@ -29,14 +33,14 @@ export default {
     },
     methods: {
         updateCategory: function() {
-            let category = this.$store.getters.getCategory(this.$route.params.main);
+            let category = this.$store.getters.getCategory(this.main);
             this.mainName = category.name;
             this.icon = category.icon;
 
             let sub;
             for(var i in category.children) {
                 sub = category.children[i];
-                if(sub.id == this.$route.params.sub) {
+                if(sub.id == this.sub) {
                     this.subName = sub.name;
                     break;
                 }
@@ -44,16 +48,16 @@ export default {
 
             /**
              * @TODO Récupération des items correspondants à la catégorie/sous catégorie sélectionnés
-             * @param Catégorie principale $route.params.main
-             * @param Catégorie enfante $route.params.sub
+             * @param Catégorie principale main
+             * @param Catégorie enfante sub
              */
         }
     },
     watch: {
-        '$route.params.main': function() {
+        'main': function() {
             this.updateCategory();
         },
-        '$route.params.sub': function() {
+        'sub': function() {
             this.updateCategory();
         },
     },

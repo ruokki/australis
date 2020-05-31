@@ -12,11 +12,13 @@ Vue.use(VueRouter)
   {
     path: '/category/:main/:sub',
     name: 'Category',
+    props: true,
     component: () => import('../views/Category.vue')
   },
   {
     path: '/borrow/:type',
     name: 'Borrow',
+    props: true,
     component: () => import('../views/Borrow.vue')
   }
 ]

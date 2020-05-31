@@ -2,7 +2,7 @@
     <q-page>
         <q-toolbar class="bg-primary text-white">
             <q-toolbar-title>{{ getTitle }}</q-toolbar-title>
-            <q-btn v-if="$route.params.type != 'oldLent'" flat :label="getHelp" icon-right="help" @click="modalInfo = true"></q-btn>
+            <q-btn v-if="type != 'oldLent'" flat :label="getHelp" icon-right="help" @click="modalInfo = true"></q-btn>
         </q-toolbar>
         <div class="q-pa-sm">
             <q-table 
@@ -17,7 +17,7 @@
                         <q-td key="state" :props="props">{{  props.colsMap.state.format(props.row.borrow_state) }}</q-td>
                         <q-td key="date_begin" class="text-left" :props="props">{{ props.colsMap.date_begin.format() }}</q-td>
                         <q-td key="date_end" :props="props">{{ props.colsMap.date_end.format() }}</q-td>
-                        <q-td v-if="$route.params.type == 'borrower'" key="action" :props="props">
+                        <q-td v-if="type == 'borrower'" key="action" :props="props">
                             <q-icon 
                                 v-if="props.row.borrow_state == 'WA' || props.row.borrow_state == 'TB'"
                                 name="close" 
@@ -50,7 +50,7 @@
                                 </q-tooltip>
                             </q-icon>
                         </q-td>
-                        <q-td v-else-if="$route.params.type == 'lender'" key="action" :props="props">
+                        <q-td v-else-if="type == 'lender'" key="action" :props="props">
                             <div v-if="props.row.borrow_state == 'WA'">
                                 <q-icon name="done" size="sm" class="cursor-pointer">
                                     <q-tooltip
@@ -126,7 +126,7 @@
             </q-table>
 
              <q-dialog v-model="modalInfo" full-width>
-                <q-card v-if="$route.params.type == 'lender'">
+                <q-card v-if="type == 'lender'">
                     <q-card-section>
                         <div class="text-h6">Fonctionnement des prêts</div>
                     </q-card-section>
@@ -135,10 +135,10 @@
                         <p class="text-body1">Les prêts fonctionnent de la façon suivante :</p>
                         <ul class="text-body1">
                             <li>Un autre utilisateur effectue une demande concernant un de vos items.</li>
-                            <li>Cette demande apparait dans votre liste avec le statut "{{ getBorrowSate(this.$route.params.type)["WA"] }}".</li>
+                            <li>Cette demande apparait dans votre liste avec le statut "{{ getBorrowSate(this.type)["WA"] }}".</li>
                             <li>Vous choisissez si oui ou non, vous voulez prêter l'item.</li>
                             <li>
-                                Si vous décidez de le prêter, l'item passe en état "{{ getBorrowSate(this.$route.params.type)["TB"] }}". A vous définir avec 
+                                Si vous décidez de le prêter, l'item passe en état "{{ getBorrowSate(this.type)["TB"] }}". A vous définir avec 
                                 l'autre utilisateur où, quand et pour combien de temps vous allez lui transmettre l'item.
                             </li>
                             <li>
@@ -162,7 +162,7 @@
                         <q-btn flat label="OK" color="primary" v-close-popup />
                     </q-card-actions>
                 </q-card>
-                <q-card v-if="$route.params.type == 'borrower'">
+                <q-card v-if="type == 'borrower'">
                     <q-card-section>
                         <div class="text-h6">Fonctionnement des emprunts</div>
                     </q-card-section>
@@ -173,7 +173,7 @@
                             <li>Vous effectuez une demande de prêt</li>
                             <li>Le propriétaire reçoit une demande sur son compte. Il dispose de 2 options :</li>
                             <li>
-                                Soit il accepte et votre demande passe en état "{{ getBorrowSate(this.$route.params.type)["TB"] }}"
+                                Soit il accepte et votre demande passe en état "{{ getBorrowSate(this.type)["TB"] }}"
                             </li>
                             <li>
                                 Soit il refuse votre demande et indique un motif.
@@ -182,14 +182,14 @@
                                 En cas d'acceptation, à vous de régler avec le propriétaire le moment et l'endroit où il vous transmettra l'item ainsi que la durée du prêt
                             </li>
                             <li>
-                                Une fois transmis, le propriétaire passe la demande en état "{{ getBorrowSate(this.$route.params.type)["BO"] }}" et indique la durée convenu.<br />
+                                Une fois transmis, le propriétaire passe la demande en état "{{ getBorrowSate(this.type)["BO"] }}" et indique la durée convenu.<br />
                                 Une notification s'affichera une semaine avant la fin du prêt sur le menu "Mes emprunts" indiquant le nombre d'item arrivant à échéance.
                             </li>
                             <li>
                                 Il est possible de demander une rallonge (ou un raccourcissement) de la durée du prêt à l'aide de l'icone <q-icon name="autorenew" size="sm" />
                             </li>
                             <li>
-                                Une fois l'item rendu, le priopriétaire passe la demande en état "{{ getBorrowSate(this.$route.params.type)["GB"] }}" et celle-ci disparait de votre interface.
+                                Une fois l'item rendu, le priopriétaire passe la demande en état "{{ getBorrowSate(this.type)["GB"] }}" et celle-ci disparait de votre interface.
                             </li>
                         </ul>
                     </q-card-section>
@@ -207,6 +207,9 @@ import moment from 'moment';
 import { mapGetters } from 'vuex';
 
 export default {
+    props: [
+        'type'
+    ],
     computed: {
         ...mapGetters([
             'tooltipTransition',
@@ -214,10 +217,10 @@ export default {
             'getBorrowSate'
         ]),
         getTitle: function() {
-            return this.titles[this.$route.params.type];
+            return this.titles[this.type];
         },
         getHelp: function() {
-            return this.help[this.$route.params.type];
+            return this.help[this.type];
         },
     },
     methods: {
@@ -244,7 +247,7 @@ export default {
                 { name: "item", label: "Item", field: "item_name"  },
                 { name: "lender", label: "Demandé à", field: "user_name"  },
                 { name: "date_ask", label: "Date de la demande", field: "borrow_date_create", format: (val) => moment(val).format('DD/MM/YYYY') },
-                { name: "state", label: "État de la demande", field: "borrow_state", format: (val) => this.getBorrowSate(this.$route.params.type)[val], align: "left" },
+                { name: "state", label: "État de la demande", field: "borrow_state", format: (val) => this.getBorrowSate(this.type)[val], align: "left" },
                 { name: "date_begin", label: "Date de début", field: "borrow_date_start", format: (val) => moment(val).format('DD/MM/YYYY') },
                 { name: "date_end", label: "Date de fin", field: "borrow_date_end", format: (val) => moment(val).format('DD/MM/YYYY') },
                 { name: "action", label: "Actions", field: "borrow_id"},
