@@ -70,13 +70,13 @@
       <q-list separator>
           <q-expansion-item 
               v-for="main in categories" 
-              :key="main.id"
-              :icon="main.icon"
-              :label="main.name"
+              :key="main.category_id"
+              :icon="main.category_icon"
+              :label="main.category_name"
               group="media">
               <q-list separator>
-                <q-item v-for="child in main.children" :key="child.id" :to="'/category/' + main.id + '/' + child.id" clickable v-ripple>
-                  <q-item-section>{{ child.name }}</q-item-section>
+                <q-item v-for="child in main.children" :key="child.category_id" :to="'/category/' + main.category_id + '/' + child.category_id" clickable v-ripple>
+                  <q-item-section>{{ child.category_name }}</q-item-section>
                 </q-item>
               </q-list>
           </q-expansion-item>

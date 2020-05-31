@@ -16,16 +16,16 @@
               align="justify"
               narrow-indicator
             >
-              <q-tab v-for="one in categories" :key="one.id" :name="one.name" :label="one.name" />
+              <q-tab v-for="one in categories" :key="one.category_id" :name="one.category_name" :label="one.category_name" />
             </q-tabs>
 
             <q-tab-panels v-model="tab" animated>
-              <q-tab-panel v-for="one in categories" :key="one.id" :name="one.name">
+              <q-tab-panel v-for="one in categories" :key="one.category_id" :name="one.category_name">
                  <q-list dense>
-                   <q-item v-for="sub in one.children" :key="sub.id">
-                      <q-item-section>{{ sub.name }}</q-item-section>
+                   <q-item v-for="sub in one.children" :key="sub.category_id">
+                      <q-item-section>{{ sub.category_name }}</q-item-section>
                       <q-item-section class="text-center">
-                        {{ itemsBySub[sub.id] ? itemsBySub[sub.id] : 0 }}
+                        {{ itemsBySub[sub.category_id] ? itemsBySub[sub.category_id] : 0 }}
                       </q-item-section>
                    </q-item>
                  </q-list>
@@ -83,7 +83,7 @@ export default {
     }
   },
   beforeMount() {
-    this.tab = Array.isArray(this.categories) ? Array.from(this.categories)[0].name : "";
+    this.tab = Array.isArray(this.categories) ? Array.from(this.categories)[0].category_name : "";
   },
   data() {
     return {

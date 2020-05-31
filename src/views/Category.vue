@@ -14,6 +14,7 @@
 </template>
 <script>
 import ItemList from './ItemList.vue';
+import { mapGetters } from 'vuex';
 
 export default {
     name: "Category",
@@ -21,6 +22,12 @@ export default {
         'main',
         'sub'
     ],
+    computed: {
+        ...mapGetters([
+            'getCategory',
+            'getSubCategory'
+        ])
+    },
     components: {
         ItemList
     },
@@ -33,18 +40,12 @@ export default {
     },
     methods: {
         updateCategory: function() {
-            let category = this.$store.getters.getCategory(this.main);
-            this.mainName = category.name;
-            this.icon = category.icon;
+            let category = this.getCategory(this.main);
+            this.mainName = category.category_name;
+            this.icon = category.category_icon;
 
-            let sub;
-            for(var i in category.children) {
-                sub = category.children[i];
-                if(sub.id == this.sub) {
-                    this.subName = sub.name;
-                    break;
-                }
-            }
+            let sub = this.getSubCategory(this.main, this.sub);
+            this.subName = sub.category_name;
 
             /**
              * @TODO Récupération des items correspondants à la catégorie/sous catégorie sélectionnés
