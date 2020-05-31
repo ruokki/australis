@@ -7,7 +7,7 @@
         <div class="background">
             <q-img :src="item.img" :ratio="1" />
         </div>
-        <div class="front fit column justify-around item-center">
+        <div class="front fit column justify-around item-center" @click="seeItem">
             <div>
                 <div class="text-center text-h5">{{ item.name }}</div>
                 <div class="text-center" v-if="item.category_icon">
@@ -33,64 +33,21 @@
                 </div>
             </div>
             <div class="absolute-bottom-right cursor-pointer actions">
-                <div v-if="item.possessed">
-                    <q-icon size="sm" name="edit" >
-                        <q-tooltip 
-                            :transition-show="tooltipTransition"
-                            :transition-hide="tooltipTransition"
-                            :content-class="tooltipClass"
-                        >
-                            Modifier l'item
-                        </q-tooltip>
-                    </q-icon>
-                    <q-icon size="sm" v-if="!item.borrowable" name="lock_open" @click="setBorrow(true)" >
-                        <q-tooltip 
-                            :transition-show="tooltipTransition"
-                            :transition-hide="tooltipTransition"
-                            :content-class="tooltipClass"
-                        >
-                            Prêts autorisés
-                        </q-tooltip>
-                    </q-icon>
-                    <q-icon size="sm" v-else name="lock" @click="setBorrow(false)">
-                        <q-tooltip 
-                            :transition-show="tooltipTransition"
-                            :transition-hide="tooltipTransition"
-                            :content-class="tooltipClass"
-                        >
-                            Prêts interdits
-                        </q-tooltip>
-                    </q-icon>
-                    <q-icon size="sm" name="check_box" @click="toCollection(false)">
-                        <q-tooltip 
-                            :transition-show="tooltipTransition"
-                            :transition-hide="tooltipTransition"
-                            :content-class="tooltipClass"
-                        >
-                            Retirer de ma collection
-                        </q-tooltip>
-                    </q-icon>
-                </div>
-                <div v-else>
-                    <q-icon size="sm" name="check_box_outline_blank" @click="toCollection(true)">
-                        <q-tooltip 
-                            :transition-show="tooltipTransition"
-                            :transition-hide="tooltipTransition"
-                            :content-class="tooltipClass"
-                        >
-                            Ajouter à ma collection
-                        </q-tooltip>
-                    </q-icon>
-                </div>
+                <ItemAction :item="item" @update="updateItem" />
             </div>
         </div>
     </div>
 </template>
 <script>
+import router from '../router/index.js';
+import ItemAction from './ItemAction.vue';
 import { mapGetters } from 'vuex';
 
 export default {
     name: "Item",
+    components: {
+        ItemAction
+    },
     computed: {
         ...mapGetters([
             'tooltipTransition',
@@ -107,22 +64,13 @@ export default {
              * @TODO Envoyer une requête pour faire un prêt
              * id : this.item.id
              */
-            },
-        // Définit si l'item est empruntable ou non
-        setBorrow(borrowable) {
-            this.item.borrowable = borrowable;
-            /**
-             * @TODO Envoyer requête pour enregistrer l'état "Empruntable"
-             */
-            },
-        toCollection(possessed) {
-            this.item.possessed = possessed;
-            /**
-             * @TODO Envoyer une requête pour retirer l'item de la collection du user
-             * id : this.item.id
-             */
+        },
+        seeItem() {
+            router.push({ path: `/item/${this.item.id}`});
+        },
+        updateItem(newItem) {
+            this.item = newItem;
         }
-
     },
     data() {
         return {
@@ -158,10 +106,6 @@ export default {
 
         .actions {
             padding: 5px 0;
-
-            .q-icon {
-                margin: 0 5px;
-            }
         }
     }
 }
