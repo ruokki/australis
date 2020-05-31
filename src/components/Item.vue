@@ -21,15 +21,7 @@
                             {{ item.category_path }}
                         </q-tooltip>
                     </q-icon>
-                    <q-icon v-if="!item.possessed" @click="borrowMe" size="md" class="cursor-pointer" name="shopping_cart" >
-                        <q-tooltip 
-                            :transition-show="tooltipTransition"
-                            :transition-hide="tooltipTransition"
-                            :content-class="tooltipClass"
-                        >
-                            Emprunter l'item
-                        </q-tooltip>
-                    </q-icon>
+                    <ItemAction :onlyBorrow="true" :item="item" @update="updateItem" />
                 </div>
             </div>
             <div class="absolute-bottom-right cursor-pointer actions">
@@ -58,13 +50,6 @@ export default {
         item: Object
     },
     methods: {
-        // Envoi d'une demande de prêt
-        borrowMe() {
-            /**
-             * @TODO Envoyer une requête pour faire un prêt
-             * id : this.item.id
-             */
-        },
         seeItem() {
             router.push({ path: `/item/${this.item.id}`});
         },

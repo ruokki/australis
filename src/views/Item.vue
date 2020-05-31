@@ -4,7 +4,7 @@
             <q-toolbar-title class="text-h4">
                 {{ item.item_name }}
             </q-toolbar-title>
-            <ItemAction :item="item" @update="updateItem" :button="true" />
+            <ItemAction :item="item" @update="updateItem" :button="true" :borrow="true" />
         </q-toolbar>
         <div id="info" class="row q-pa-sm">
             <div class="col-4 row justify-center items-center">
@@ -60,7 +60,7 @@ export default {
                 item_img: "https://picsum.photos/1200/500",
                 main_category: 2,
                 sub_category: 22,
-                possessed: true,
+                possessed: false,
                 item_creator: "Moi",
                 item_editor: "Edition du pingouin",
                 item_release: 2014,

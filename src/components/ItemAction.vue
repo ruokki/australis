@@ -1,5 +1,14 @@
 <template>
-    <q-btn-group flat v-if="item.possessed">
+    <q-icon v-if="onlyBorrow" size="sm" class="q-px-sm cursor-pointer" name="shopping_cart" @click.stop="borrowMe" >
+        <q-tooltip 
+            :transition-show="tooltipTransition"
+            :transition-hide="tooltipTransition"
+            :content-class="tooltipClass"
+        >
+            Emprunter l'item
+        </q-tooltip>
+    </q-icon>
+    <q-btn-group flat v-else-if="item.possessed">
         <q-btn icon="edit">
             <q-tooltip 
                 :transition-show="tooltipTransition"
@@ -48,6 +57,15 @@
                 Ajouter à ma collection
             </q-tooltip>
         </q-btn>
+        <q-btn v-if="borrow" icon="shopping_cart" @click.stop="borrowMe" >
+            <q-tooltip 
+                :transition-show="tooltipTransition"
+                :transition-hide="tooltipTransition"
+                :content-class="tooltipClass"
+            >
+                Emprunter l'item
+            </q-tooltip>
+        </q-btn>
     </q-btn-group>
 </template>
 <script>
@@ -58,7 +76,15 @@ export default {
     name: "ItemAction",
     props: {
         item: Object,
-        button: Boolean
+        button: Boolean,
+        borrow: {
+            type: Boolean,
+            default: false
+        },
+        onlyBorrow: {
+            type: Boolean,
+            default: false
+        },
     },
     data() {
         return {
@@ -85,6 +111,13 @@ export default {
             this.$emit('update', this.item);
             /**
              * @TODO Envoyer une requête pour retirer l'item de la collection du user
+             * id : this.item.id
+             */
+        },
+        // Envoi d'une demande de prêt
+        borrowMe() {
+            /**
+             * @TODO Envoyer une requête pour faire un prêt
              * id : this.item.id
              */
         },
