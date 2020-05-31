@@ -1,6 +1,6 @@
 <template>
-    <div v-if="item.possessed">
-        <q-icon size="sm" name="edit" >
+    <q-btn-group flat v-if="item.possessed">
+        <q-btn icon="edit">
             <q-tooltip 
                 :transition-show="tooltipTransition"
                 :transition-hide="tooltipTransition"
@@ -9,8 +9,8 @@
             >
                 Modifier l'item
             </q-tooltip>
-        </q-icon>
-        <q-icon size="sm" v-if="!item.borrowable" name="lock_open" @click.stop="setBorrow(true)" >
+        </q-btn>
+        <q-btn v-if="!item.borrowable" icon="lock_open" @click.stop="setBorrow(true)" >
             <q-tooltip 
                 :transition-show="tooltipTransition"
                 :transition-hide="tooltipTransition"
@@ -18,8 +18,8 @@
             >
                 Prêts autorisés
             </q-tooltip>
-        </q-icon>
-        <q-icon size="sm" v-else name="lock" @click.stop="setBorrow(false)">
+        </q-btn>
+        <q-btn v-else icon="lock" @click.stop="setBorrow(false)">
             <q-tooltip 
                 :transition-show="tooltipTransition"
                 :transition-hide="tooltipTransition"
@@ -27,8 +27,8 @@
             >
                 Prêts interdits
             </q-tooltip>
-        </q-icon>
-        <q-icon size="sm" name="check_box" @click.stop="toCollection(false)">
+        </q-btn>
+        <q-btn icon="check_box" @click.stop="toCollection(false)">
             <q-tooltip 
                 :transition-show="tooltipTransition"
                 :transition-hide="tooltipTransition"
@@ -36,10 +36,10 @@
             >
                 Retirer de ma collection
             </q-tooltip>
-        </q-icon>
-    </div>
-    <div v-else>
-        <q-icon size="sm" name="check_box_outline_blank" @click.stop="toCollection(true)">
+        </q-btn>
+    </q-btn-group>
+    <q-btn-group flat v-else>
+        <q-btn icon="check_box_outline_blank" @click.stop="toCollection(true)">
             <q-tooltip 
                 :transition-show="tooltipTransition"
                 :transition-hide="tooltipTransition"
@@ -47,8 +47,8 @@
             >
                 Ajouter à ma collection
             </q-tooltip>
-        </q-icon>
-    </div>
+        </q-btn>
+    </q-btn-group>
 </template>
 <script>
 import { mapGetters } from 'vuex';
@@ -56,9 +56,15 @@ import router from '../router/index.js';
 
 export default {
     name: "ItemAction",
-    props: [
-        'item'
-    ],
+    props: {
+        item: Object,
+        button: Boolean
+    },
+    data() {
+        return {
+            
+        };
+    },
     computed: {
         ...mapGetters([
             'tooltipTransition',
@@ -75,8 +81,6 @@ export default {
              */
             },
         toCollection(possessed) {
-            console.log(possessed);
-            console.log(this.item.possessed);
             this.item.possessed = possessed;
             this.$emit('update', this.item);
             /**
@@ -93,7 +97,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.q-icon {
-    margin: 0 5px;
-}
+
 </style>
