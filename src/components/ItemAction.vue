@@ -37,24 +37,24 @@
                 Prêts interdits
             </q-tooltip>
         </q-btn>
-        <q-btn icon="check_box" @click.stop="toCollection(false)">
+        <q-btn icon="check_box" @click.stop="toReserve(false)">
             <q-tooltip 
                 :transition-show="tooltipTransition"
                 :transition-hide="tooltipTransition"
                 :content-class="tooltipClass"
             >
-                Retirer de ma collection
+                Retirer de ma réserve
             </q-tooltip>
         </q-btn>
     </q-btn-group>
     <q-btn-group flat v-else>
-        <q-btn icon="check_box_outline_blank" @click.stop="toCollection(true)">
+        <q-btn icon="check_box_outline_blank" @click.stop="toReserve(true)">
             <q-tooltip 
                 :transition-show="tooltipTransition"
                 :transition-hide="tooltipTransition"
                 :content-class="tooltipClass"
             >
-                Ajouter à ma collection
+                Ajouter à ma réserve
             </q-tooltip>
         </q-btn>
         <q-btn v-if="borrow" icon="shopping_cart" @click.stop="borrowMe" >
@@ -102,15 +102,23 @@ export default {
         setBorrow(borrowable) {
             this.item.borrowable = borrowable;
             this.$emit('update', this.item);
+            this.$q.notify({
+                type: 'positive',
+                message: borrowable ? "L'item peut à nouveau être emprunté" : "L'item ne peux plus être emprunter"
+            });
             /**
              * @TODO Envoyer requête pour enregistrer l'état "Empruntable"
              */
             },
-        toCollection(possessed) {
+        toReserve(possessed) {
             this.item.possessed = possessed;
             this.$emit('update', this.item);
+            this.$q.notify({
+                type: 'positive',
+                message: possessed ? "Item ajouté à votre réserve" : "Item retiré de votre réserve"
+            });
             /**
-             * @TODO Envoyer une requête pour retirer l'item de la collection du user
+             * @TODO Envoyer une requête pour retirer l'item de la reserve du user
              * id : this.item.id
              */
         },
@@ -119,6 +127,10 @@ export default {
             /**
              * @TODO Envoyer une requête pour faire un prêt
              * id : this.item.id
+             * 
+             * S'il y a plusieurs possesseurs, afficher modal pour demander à qui faire la demande
+             * Si un seul, faire automatiquement la demande à ce user
+             * Si aucun, message d'alerte pour dire qu'aucun item n'est disponible
              */
         },
         editItem() {

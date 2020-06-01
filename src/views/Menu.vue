@@ -20,7 +20,7 @@
           </q-item>
           <q-expansion-item 
               icon="storage"
-              label="Ma collection"
+              label="Ma réserve"
               group="account">
               <q-list separator>
                 <q-item to="/category/mine" clickable v-ripple>
