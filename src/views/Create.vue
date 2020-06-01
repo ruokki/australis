@@ -52,10 +52,60 @@
                         :subCat="this.newItem.subcategory_id" 
                         :item="newItem"
                     />
+                    <q-input v-if="type == 'collection'" 
+                        type="number" 
+                        v-model="newItem.collection_length"
+                        label="Nombre de tome"
+                        hint="Pour gérer les tomes possédés, cliquer sur l'icône" 
+                    >
+                        <template v-slot:append>
+                            <q-icon name="list" class="cursor-pointer" @click="dialogPossessed = true" />
+                        </template>
+                    </q-input>
                     <div class="col q-py-md">
                         <q-btn label="Enregistrer" type="submit" color="primary" icon="send" />
                     </div>
                 </q-form>
+
+                 <q-dialog v-model="dialogPossessed" position="right">
+                    <q-card>
+                        <q-toolbar>
+                            <q-toolbar-title>Liste des tomes possédés</q-toolbar-title>
+                            <q-btn flat round dense icon="close" v-close-popup />
+                        </q-toolbar>
+                        <q-card-section>
+                            <div class="row">
+                                <q-toggle v-model="allTome" label="Tous les tomes" left-label />
+                            </div>
+                            <div class="row" v-for="row in nbLine" :key="row">
+                                <div class="col-4" v-if="getRowInfo(row)[0]">
+                                    <q-checkbox 
+                                        v-model="newItem.collection_possessed"
+                                        :val="'T' + getRowInfo(row)[0]"
+                                        :label="'Tome ' + getRowInfo(row)[0]"
+                                        @input="checkAllToggle"
+                                    />
+                                </div>
+                                <div class="col-4" v-if="getRowInfo(row)[1]">
+                                    <q-checkbox 
+                                        v-model="newItem.collection_possessed"
+                                        :val="'T' + getRowInfo(row)[1]"
+                                        :label="'Tome ' + getRowInfo(row)[1]"
+                                        @input="checkAllToggle"
+                                    />
+                                </div>
+                                <div class="col-4" v-if="getRowInfo(row)[2]">
+                                    <q-checkbox 
+                                        v-model="newItem.collection_possessed"
+                                        :val="'T' + getRowInfo(row)[2]"
+                                        :label="'Tome ' + getRowInfo(row)[2]"
+                                        @input="checkAllToggle"
+                                    />
+                                </div>
+                            </div>
+                        </q-card-section>
+                    </q-card>
+                </q-dialog>
             </q-expansion-item>
         </div>
     </q-page>
@@ -153,6 +203,7 @@ export default {
                 return "";
             }
         },
+        // Affiche l'alerte "Item One shot" si catégorie de l'item accepte les collections
         alertOneShot: function() {
             if(this.newItem.category_id > 0) {
                 let cat = this.getCategory(this.newItem.category_id);
@@ -161,20 +212,36 @@ export default {
                 }
             }
             return false;
+        }, 
+        // Force le type de collection_length pour le v-for
+        parseLength: function() {
+            return this.newItem.collection_length == '' ? 0 : parseInt(this.newItem.collection_length);
+        },
+        // Nombre de boucle à faire pour afficher toutes les checkboxes
+        nbLine: function() {
+            return Math.ceil(this.parseLength / this.nbCheckPerLine);
         }
     },
     data() {
         return {
             newItem: {
                 category_id: 0,
-                subcategory_id: 0
+                subcategory_id: 0,
+                collection_length: '',
+                collection_possessed: []
             },
             // Ouverture auto de l'expansion "Categorie"
             seeCategory: true,
             // Ouverture auto de l'expansion "Sous categorie"
             seeSub: false,
             // Ouverture auto de l'expansion "Informations"
-            seeInfo: false
+            seeInfo: false,
+            // Affichage de la modal pour gérer les tomes possédés
+            dialogPossessed: false,
+            // On sélectionne par défaut tout les tomes
+            allTome: false,
+            // Nombre de checkbox par ligne
+            nbCheckPerLine: 3
         }
     },
     methods: {
@@ -190,6 +257,7 @@ export default {
                 this.seeSub = true;
             }
         },
+        // Enregistrement de l'item sur le serveur
         saveItem: function() {
             /**
              * @TODO Envoyer une requête pour enregistrer l'item en base
@@ -199,17 +267,50 @@ export default {
                 type: 'positive',
                 message: "Item enregistré"
             });
+        },
+        // Génère les clés pour les checkboxes en fonction de l'idx de la ligne
+        getRowInfo: function(currentIdx) {
+            let start = (currentIdx - 1) * 3;
+            let toReturn = [];
+            for(var i = start; i < start + this.nbCheckPerLine; i++) {
+                if(i + 1 <= this.newItem.collection_length) {
+                    toReturn.push(i + 1);
+                }
+            }
+            return toReturn;
+        },
+        // Vérifie s'il faut décocher le toggle "Tous"
+        checkAllToggle: function() {
+            if(this.newItem.collection_possessed == this.newItem.collection_length) {
+                this.allTome = true;
+            }
+            else {
+                this.allTome = null;
+            }
         }
     },
     watch: {
         'type': function() {
             this.newItem = {
                 category_id: 0,
-                subcategory_id: 0
+                subcategory_id: 0,
+                collection_length: '',
+                collection_possessed: []
             };
             this.seeCategory = true,
             this.seeSub = false;
             this.seeInfo = false;
+        },
+        'allTome': function(newVal) {
+            if(newVal == true) {
+                this.newItem.collection_possessed = [];
+                for(var i = 1; i <= this.parseLength; i++) {
+                    this.newItem.collection_possessed.push('T' + i);
+                }
+            }
+            else if(newVal == false) {
+                this.newItem.collection_possessed = [];
+            }
         }
     }
 }
