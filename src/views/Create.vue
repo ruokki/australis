@@ -11,7 +11,12 @@
                 :icon="categoryIcon" 
                 v-model="seeCategory"
             >
-                <q-option-group v-model="newItem.category_id" inline :options="categories"  />
+                <q-option-group 
+                    v-model="newItem.category_id" 
+                    inline 
+                    :options="categories" 
+                    @input="updateSee('cat')"
+                />
             </q-expansion-item>
             <q-expansion-item 
                 label="Sous-catégorie" 
@@ -20,7 +25,12 @@
                 v-model="seeSub"
                 :disable="newItem.category_id == 0" 
             >
-                <q-option-group v-model="newItem.subcategory_id" inline :options="subCategories"  />
+                <q-option-group 
+                    v-model="newItem.subcategory_id" 
+                    inline 
+                    :options="subCategories" 
+                    @input="updateSee('sub')"
+                />
             </q-expansion-item>
             <q-expansion-item 
                 label="Informations" 
@@ -104,7 +114,7 @@ export default {
         },
         // Récupération del'icone de la sous-catégorie
         subCategoryName: function() {
-            if(this.newItem.subcategory_id != 0) {
+            if(this.newItem.category_id != 0 && this.newItem.subcategory_id != 0) {
                 return this.getSubCategory(this.newItem.category_id, this.newItem.subcategory_id).category_name;
             }
             else {
@@ -112,23 +122,43 @@ export default {
             }
         },
         // Ouverture auto de l'expansion "Categorie"
-        seeCategory: function() {
-            return this.newItem.category_id == 0;
-        },
+        // seeCategory: function() {
+        //     return this.newItem.category_id == 0;
+        // },
         // Ouverture auto de l'expansion "Sous categorie"
-        seeSub: function() {
-            return this.newItem.category_id > 0 && this.newItem.subcategory_id == 0;
-        },
+        // seeSub: function() {
+        //     return this.newItem.category_id > 0 && this.newItem.subcategory_id == 0;
+        // },
         // Ouverture auto de l'expansion "Informations"
-        seeInfo: function() {
-            return this.newItem.category_id > 0 && this.newItem.subcategory_id > 0;
-        },
+        // seeInfo: function() {
+        //     return this.newItem.category_id > 0 && this.newItem.subcategory_id > 0;
+        // }
     },
     data() {
         return {
             newItem: {
                 category_id: 0,
                 subcategory_id: 0
+            },
+            // Ouverture auto de l'expansion "Categorie"
+            seeCategory: true,
+            // Ouverture auto de l'expansion "Sous categorie"
+            seeSub: false,
+            // Ouverture auto de l'expansion "Informations"
+            seeInfo: false
+        }
+    },
+    methods: {
+        updateSee: function(from) {
+            if(from == 'sub') {
+                this.seeCategory = false;
+                this.seeSub = false;
+                this.seeInfo = true
+            }
+            else if(from == 'cat') {
+                this.newItem.subcategory_id = 0;
+                this.seeCategory = false;
+                this.seeSub = true;
             }
         }
     }
