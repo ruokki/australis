@@ -18,6 +18,7 @@
                     @input="updateSee('cat')"
                 />
             </q-expansion-item>
+            <q-separator />
             <q-expansion-item 
                 label="Sous-catégorie" 
                 :caption="subCategoryName"
@@ -32,6 +33,7 @@
                     @input="updateSee('sub')"
                 />
             </q-expansion-item>
+            <q-separator />
             <q-expansion-item 
                 label="Informations" 
                 switch-toggle-side
