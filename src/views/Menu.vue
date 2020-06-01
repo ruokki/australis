@@ -69,7 +69,7 @@
               :key="main.category_id"
               :icon="main.category_icon"
               :label="main.category_name"
-              group="media">
+              group="account">
               <q-list separator>
                 <q-item v-for="child in main.children" :key="child.category_id" :to="'/category/' + main.category_id + '/' + child.category_id" clickable v-ripple>
                   <q-item-section>{{ child.category_name }}</q-item-section>
