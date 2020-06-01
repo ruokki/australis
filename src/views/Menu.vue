@@ -3,16 +3,12 @@
       <div class="row justify-center">
         <img id="logo" src="../assets/logo.png" />
       </div>
-      <div class="row justify-center">
-          <router-link class="col text-center text-h4" to="/">
-            <q-icon name="home" />
-          </router-link>
-          <router-link class="col text-center text-h4" to="/">
-            <q-icon name="search" />
-          </router-link >
-          <router-link class="col text-center text-h4" to="/">
-            <q-icon name="exit_to_app" />
-          </router-link >
+      <div>
+          <q-btn-group spread flat>
+            <q-btn class="col text-center" size="lg" icon="home" to="/" />
+            <q-btn class="col text-center" size="lg" icon="search" to="/" />
+            <q-btn class="col text-center" size="lg" icon="exit_to_app" to="/" />
+          </q-btn-group>
       </div>
       <q-list separator>
           <q-item>
