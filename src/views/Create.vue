@@ -43,7 +43,7 @@
                         :form="true" 
                         :mainCat="this.newItem.category_id" 
                         :subCat="this.newItem.subcategory_id" 
-                        @update="updateItem"
+                        :item="newItem"
                     />
                     <div class="col q-py-md">
                         <q-btn label="Enregistrer" type="submit" color="primary" icon="send" />
@@ -163,9 +163,6 @@ export default {
                 this.seeSub = true;
             }
         },
-        updateItem: function(newInfo) {
-            Object.assign(this.newItem, newInfo);
-        },
         saveItem: function() {
             /**
              * @TODO Envoyer une requête pour enregistrer l'item en base
@@ -175,6 +172,17 @@ export default {
                 type: 'positive',
                 message: "Item enregistré"
             });
+        }
+    },
+    watch: {
+        'type': function() {
+            this.newItem = {
+                category_id: 0,
+                subcategory_id: 0
+            };
+            this.seeCategory = true,
+            this.seeSub = false;
+            this.seeInfo = false;
         }
     }
 }

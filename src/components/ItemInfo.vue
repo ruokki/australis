@@ -26,14 +26,12 @@
          <q-input 
             label="Nom" 
             debounce="500"
-            v-model="infoItem.item_name" 
-            @input="updateParent" 
+            v-model="item.item_name" 
         />
          <q-file 
             label="Image" 
-            v-model="infoItem.item_img" 
+            v-model="item.item_img" 
             accept=".jpg, .png, image/*"
-            @input="updateParent"
         >
             <template v-slot:append>
                 <q-icon name="attachment" />
@@ -56,30 +54,26 @@
             type="textarea" 
             label="Description" 
             debounce="500"
-            v-model="infoItem.item_descript" 
-            @input="updateParent" 
+            v-model="item.item_descript" 
         />
         <div v-for="(one, key) in fields" :key="key" >
             <q-input v-if="one.field_type == 'text'" 
                 :label="one.field_label" 
                 debounce="500"
-                v-model="infoItem['item_' + one.field_name]" 
-                @input="updateParent"
+                v-model="item['item_' + one.field_name]" 
             />
             <q-input v-else-if="one.field_type == 'number'" 
                 type="number" 
                 debounce="500"
                 :label="one.field_label" 
-                v-model="infoItem['item_' + one.field_name]" 
-                @input="updateParent" 
+                v-model="item['item_' + one.field_name]" 
             />
             <q-select v-else-if="one.field_type == 'select'" 
                 :label="one.field_label" 
                 :options="one.field_options" 
                 debounce="500"
                 value="" 
-                v-model="infoItem['item_' + one.field_name]" 
-                @input="updateParent" 
+                v-model="item['item_' + one.field_name]" 
             />
         </div>
     </div>
@@ -148,17 +142,11 @@ export default {
             }
         }
     },
-    methods: {
-        // Champs modifiés, on va le dire au prant
-        updateParent: function() {
-            this.$emit('update', this.infoItem);
-        }
-    },
     created() {
         let defaultVal;
         for(var i in this.fields) {
             defaultVal = "";
-            this.infoItem['item_' + this.fields[i].field_name] = defaultVal;
+            this.item['item_' + this.fields[i].field_name] = defaultVal;
         }
     }
 }
