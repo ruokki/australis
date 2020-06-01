@@ -32,6 +32,12 @@ Vue.use(VueRouter)
     name: 'Item',
     props: true,
     component: () => import('../views/Item.vue')
+  },
+  {
+    path: '/create/:type',
+    name: 'Create',
+    props: true,
+    component: () => import('../views/Create.vue')
   }
 ]
 

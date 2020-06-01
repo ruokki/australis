@@ -22,10 +22,10 @@
                 <q-item to="/category/mine" clickable v-ripple>
                   <q-item-section>Mes items</q-item-section>
                 </q-item>
-                <q-item clickable v-ripple>
+                <q-item to="/create/item" clickable v-ripple>
                   <q-item-section>Créer un item</q-item-section>
                 </q-item>
-                <q-item clickable v-ripple>
+                <q-item to="/create/collection" clickable v-ripple>
                   <q-item-section>Créer une collection</q-item-section>
                 </q-item>
               </q-list>
