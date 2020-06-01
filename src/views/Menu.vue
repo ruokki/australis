@@ -5,9 +5,9 @@
       </div>
       <div>
           <q-btn-group spread flat>
-            <q-btn class="col text-center" size="lg" icon="home" to="/" />
-            <q-btn class="col text-center" size="lg" icon="search" to="/" />
-            <q-btn class="col text-center" size="lg" icon="exit_to_app" to="/" />
+            <q-btn class="text-center" size="lg" icon="home" to="/" />
+            <q-btn class="text-center" size="lg" icon="search" to="/" />
+            <q-btn class="text-center" size="lg" icon="exit_to_app" to="/" />
           </q-btn-group>
       </div>
       <q-list separator>

@@ -23,7 +23,7 @@
                 :caption="subCategoryName"
                 switch-toggle-side 
                 v-model="seeSub"
-                :disable="newItem.category_id == 0" 
+                
             >
                 <q-option-group 
                     v-model="newItem.subcategory_id" 
@@ -36,18 +36,30 @@
                 label="Informations" 
                 switch-toggle-side
                 v-model="seeInfo"
-                :disable="newItem.category_id == 0 || newItem.subcategory_id == 0" 
+                
             >
-
+                <ItemInfo 
+                    :form="true" 
+                    :mainCat="this.newItem.category_id" 
+                    :subCat="this.newItem.subcategory_id" 
+                    @update="updateItem"
+                />
+                <div class="col q-py-md">
+                    <q-btn label="Enregistrer" color="primary" icon="send" />
+                </div>
             </q-expansion-item>
         </div>
     </q-page>
 </template>
 <script>
 import { mapGetters } from 'vuex';
+import ItemInfo from '../components/ItemInfo.vue';
 
 export default {
     name: "Create",
+    components: {
+        ItemInfo
+    },
     props: [ 'type' ],
     computed: {
         ...mapGetters([
@@ -120,19 +132,7 @@ export default {
             else {
                 return "";
             }
-        },
-        // Ouverture auto de l'expansion "Categorie"
-        // seeCategory: function() {
-        //     return this.newItem.category_id == 0;
-        // },
-        // Ouverture auto de l'expansion "Sous categorie"
-        // seeSub: function() {
-        //     return this.newItem.category_id > 0 && this.newItem.subcategory_id == 0;
-        // },
-        // Ouverture auto de l'expansion "Informations"
-        // seeInfo: function() {
-        //     return this.newItem.category_id > 0 && this.newItem.subcategory_id > 0;
-        // }
+        }
     },
     data() {
         return {
@@ -160,6 +160,9 @@ export default {
                 this.seeCategory = false;
                 this.seeSub = true;
             }
+        },
+        updateItem: function(newInfo) {
+            Object.assign(this.newItem, newInfo);
         }
     }
 }

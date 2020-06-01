@@ -19,7 +19,31 @@ export default new Vuex.Store({
                         category_name: "Album",
                         category_id: 11,
                         category_fields: [
-                            'creator'
+                            {
+                                field_name: 'creator',
+                                field_label: 'Créateur',
+                                field_type: 'text'
+                            },
+                            {
+                                field_name: 'editor',
+                                field_label: 'Éditeur',
+                                field_type: 'text'
+                            },
+                            {
+                                field_name: 'release',
+                                field_label: 'Année de sortie',
+                                field_type: 'number'
+                            },
+                            {
+                                field_name: 'type',
+                                field_label: 'Support',
+                                field_type: 'select',
+                                field_options: [
+                                    'PS4',
+                                    'XBoxOne',
+                                    'Switch'
+                                ]
+                            },
                         ]
                     },
                     {
