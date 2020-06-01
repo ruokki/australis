@@ -23,7 +23,7 @@
               label="Ma collection"
               group="account">
               <q-list separator>
-                <q-item clickable v-ripple>
+                <q-item to="/category/mine" clickable v-ripple>
                   <q-item-section>Mes items</q-item-section>
                 </q-item>
                 <q-item clickable v-ripple>

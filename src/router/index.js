@@ -10,10 +10,16 @@ Vue.use(VueRouter)
     component: () => import('../views/Home.vue')
   },
   {
-    path: '/category/:main/:sub',
+    path: '/category/:main',
+    component: () => import('../views/Category.vue'),
     name: 'Category',
     props: true,
-    component: () => import('../views/Category.vue')
+    children: [
+      {
+        path: ':sub',
+        component: () => import('../views/Category.vue'),
+      }
+    ]
   },
   {
     path: '/borrow/:type',
