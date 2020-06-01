@@ -38,15 +38,17 @@
                 v-model="seeInfo"
                 :disable="newItem.category_id == 0 || newItem.subcategory_id == 0" 
             >
-                <ItemInfo 
-                    :form="true" 
-                    :mainCat="this.newItem.category_id" 
-                    :subCat="this.newItem.subcategory_id" 
-                    @update="updateItem"
-                />
-                <div class="col q-py-md">
-                    <q-btn label="Enregistrer" color="primary" icon="send" />
-                </div>
+                <q-form @submit="saveItem">
+                    <ItemInfo 
+                        :form="true" 
+                        :mainCat="this.newItem.category_id" 
+                        :subCat="this.newItem.subcategory_id" 
+                        @update="updateItem"
+                    />
+                    <div class="col q-py-md">
+                        <q-btn label="Enregistrer" type="submit" color="primary" icon="send" />
+                    </div>
+                </q-form>
             </q-expansion-item>
         </div>
     </q-page>
@@ -163,6 +165,16 @@ export default {
         },
         updateItem: function(newInfo) {
             Object.assign(this.newItem, newInfo);
+        },
+        saveItem: function() {
+            /**
+             * @TODO Envoyer une requête pour enregistrer l'item en base
+             */
+            console.log(this.newItem);
+            this.$q.notify({
+                type: 'positive',
+                message: "Item enregistré"
+            });
         }
     }
 }

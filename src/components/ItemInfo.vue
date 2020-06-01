@@ -32,10 +32,24 @@
          <q-file 
             label="Image" 
             v-model="infoItem.item_img" 
+            accept=".jpg, .png, image/*"
             @input="updateParent"
         >
             <template v-slot:append>
                 <q-icon name="attachment" />
+            </template>
+            <template v-slot:file="{ index, file }">
+                <q-chip
+                class="full-width q-my-xs"
+                square
+                >
+                    <q-avatar>
+                        <q-icon name="photo" />
+                    </q-avatar>
+                    <div class="ellipsis relative-position">
+                        {{ file.name }}
+                    </div>
+                </q-chip>
             </template>
         </q-file>
         <q-input 
@@ -50,7 +64,7 @@
                 :label="one.field_label" 
                 debounce="500"
                 v-model="infoItem['item_' + one.field_name]" 
-                @input="updateParent" 
+                @input="updateParent"
             />
             <q-input v-else-if="one.field_type == 'number'" 
                 type="number" 
