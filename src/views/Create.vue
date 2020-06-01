@@ -66,6 +66,7 @@ export default {
     computed: {
         ...mapGetters([
             'getAllCategories',
+            'getCollectionCategories',
             'getCategory',
             'getSubCategory'
         ]),
@@ -80,7 +81,7 @@ export default {
         },
         // Liste des catégories disponibles
         categories: function() {
-            let all = this.getAllCategories;
+            let all = this.type == 'collection' ? this.getCollectionCategories : this.getAllCategories;
             let optGroup = [];
 
             for(var i in all) {
@@ -99,10 +100,20 @@ export default {
             if(this.newItem.category_id > 0) {
                 let allSub = this.getCategory(this.newItem.category_id);
                 for(var i in allSub.children) {
-                    optGroup.push({
-                        label: allSub.children[i].category_name,
-                        value: allSub.children[i].category_id
-                    });
+                    if(this.type == 'collection') { 
+                        if(allSub.children[i].collection_allowed == true) {
+                            optGroup.push({
+                                label: allSub.children[i].category_name,
+                                value: allSub.children[i].category_id
+                            });
+                        }
+                    }
+                    else {
+                        optGroup.push({
+                            label: allSub.children[i].category_name,
+                            value: allSub.children[i].category_id
+                        });
+                    }
                 }
             }
 

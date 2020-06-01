@@ -14,10 +14,12 @@ export default new Vuex.Store({
                 category_name: "Audio",
                 category_icon: "music_note",
                 category_id: 1,
+                collection_allowed: true,
                 children: [
                     {
                         category_name: "Album",
                         category_id: 11,
+                        collection_allowed: true,
                         category_fields: [
                             {
                                 field_name: 'creator',
@@ -49,6 +51,7 @@ export default new Vuex.Store({
                     {
                         category_name: "Audiobook",
                         category_id: 12,
+                        collection_allowed: true,
                         category_fields: [
                             'creator'
                         ]
@@ -193,7 +196,9 @@ export default new Vuex.Store({
         }
     },
     getters: {
+        // Récupère l'ensemble des catégories
         getAllCategories:(state) => state.categories,
+        // Récupère une catégorie
         getCategory:(state) => (id) => {
             let one;
             for(var i in state.categories) {
@@ -203,6 +208,7 @@ export default new Vuex.Store({
                 }
             }
         },
+        // Récupère une sous catégorie
         getSubCategory: (state, getters) => (main, sub) => {
             let parent = getters.getCategory(main);
             let child;
@@ -213,8 +219,24 @@ export default new Vuex.Store({
                 }
             }
         },
+        // Récupère les catégories autorisées pour les collections
+        getCollectionCategories: (state) => {
+            let collectionCategories = [];
+            let one;
+
+            for(var i in state.categories) {
+                one = state.categories[i];
+                if(one.collection_allowed === true) {
+                    collectionCategories.push(one);
+                }
+            }
+            return collectionCategories;
+        },
+        // Transition CSS pour les tooltips
         tooltipTransition: (state) => state.tooltip.transition,
+        // Classes CSS pour les tooltips
         tooltipClass: (state) => state.tooltip.class,
+        // Récupère la liste des états pour les emprunts
         getBorrowSate: (state) => (type) => state.borrowSate[type],
     },
     mutations: {},
