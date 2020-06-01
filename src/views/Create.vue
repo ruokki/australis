@@ -23,7 +23,7 @@
                 :caption="subCategoryName"
                 switch-toggle-side 
                 v-model="seeSub"
-                
+                :disable="newItem.category_id == 0"
             >
                 <q-option-group 
                     v-model="newItem.subcategory_id" 
@@ -36,7 +36,7 @@
                 label="Informations" 
                 switch-toggle-side
                 v-model="seeInfo"
-                
+                :disable="newItem.category_id == 0 || newItem.subcategory_id == 0" 
             >
                 <ItemInfo 
                     :form="true" 
