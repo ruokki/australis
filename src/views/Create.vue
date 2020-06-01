@@ -38,6 +38,11 @@
                 v-model="seeInfo"
                 :disable="newItem.category_id == 0 || newItem.subcategory_id == 0" 
             >
+                <div v-show="alertOneShot" class="row justify-between items-center text-white bg-warning q-pa-xs">
+                    <q-icon name="warning" size="sm" />
+                    <div>Attention ! L'item doit être un one-shot.</div>
+                    <q-icon name="warning" size="sm" />
+                </div>
                 <q-form @submit="saveItem">
                     <ItemInfo 
                         :form="true" 
@@ -145,6 +150,15 @@ export default {
             else {
                 return "";
             }
+        },
+        alertOneShot: function() {
+            if(this.newItem.category_id > 0) {
+                let cat = this.getCategory(this.newItem.category_id);
+                if(cat.collection_allowed === true && this.type == 'item') {
+                    return true;
+                }
+            }
+            return false;
         }
     },
     data() {
