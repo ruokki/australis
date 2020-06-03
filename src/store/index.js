@@ -9,173 +9,7 @@ export default new Vuex.Store({
             transition: "scale",
             class: "bg-primary text-body1"
         },
-        categories: [
-            {
-                category_name: "Audio",
-                category_icon: "music_note",
-                category_id: 1,
-                collection_allowed: true,
-                children: [
-                    {
-                        category_name: "Album",
-                        category_id: 11,
-                        collection_allowed: true,
-                        category_fields: [
-                            {
-                                field_name: 'creator',
-                                field_label: 'Créateur',
-                                field_type: 'text'
-                            },
-                            {
-                                field_name: 'editor',
-                                field_label: 'Éditeur',
-                                field_type: 'text'
-                            },
-                            {
-                                field_name: 'release',
-                                field_label: 'Année de sortie',
-                                field_type: 'number'
-                            },
-                            {
-                                field_name: 'type',
-                                field_label: 'Support',
-                                field_type: 'select',
-                                field_options: [
-                                    'PS4',
-                                    'XBoxOne',
-                                    'Switch'
-                                ]
-                            },
-                        ]
-                    },
-                    {
-                        category_name: "Audiobook",
-                        category_id: 12,
-                        collection_allowed: true,
-                        category_fields: [
-                            'creator'
-                        ]
-                    },
-                    {
-                        category_name: "Saga",
-                        category_id: 13,
-                        category_fields: [
-                            'creator'
-                        ]
-                    },
-                ]
-            },
-            {
-                category_name: "Vidéo",
-                category_icon: "movie",
-                category_id: 2,
-                children: [
-                    {
-                        category_name: "Série",
-                        category_id: 21,
-                        category_fields: [
-                            'creator'
-                        ]
-                    },
-                    {
-                        category_name: "Anime",
-                        category_id: 22,
-                        category_fields: [
-                            {
-                                field_name: 'creator',
-                                field_label: 'Créateur',
-                                field_type: 'text'
-                            },
-                            {
-                                field_name: 'editor',
-                                field_label: 'Éditeur',
-                                field_type: 'text'
-                            },
-                            {
-                                field_name: 'release',
-                                field_label: 'Année de sortie',
-                                field_type: 'number'
-                            },
-                            {
-                                field_name: 'type',
-                                field_label: 'Support',
-                                field_type: 'select'
-                            },
-                        ]
-                    },
-                    {
-                        category_name: "Film",
-                        category_id: 23,
-                        category_fields: [
-                            'creator'
-                        ]
-                    },
-                ]
-            },
-            {
-                category_name: "Livres",
-                category_icon: "menu_book",
-                category_id: 3,
-                children: [
-                    {
-                        category_name: "Livre",
-                        category_id: 31,
-                        category_fields: [
-                            'creator'
-                        ]
-                    },
-                    {
-                        category_name: "Comic",
-                        category_id: 32,
-                        category_fields: [
-                            'creator'
-                        ]
-                    },
-                    {
-                        category_name: "Manga",
-                        category_id: 33,
-                        category_fields: [
-                            'creator'
-                        ]
-                    },
-                    {
-                        category_name: "BD",
-                        category_id: 34,
-                        category_fields: [
-                            'creator'
-                        ]
-                    },
-                ]
-            },
-            {
-                category_name: "Jeux",
-                category_icon: "gamepad",
-                category_id: 4,
-                children: [
-                    {
-                        category_name: "Jeux vidéo",
-                        category_id: 41,
-                        category_fields: [
-                            'creator'
-                        ]
-                    },
-                    {
-                        category_name: "Jeux de plateau",
-                        category_id: 42,
-                        category_fields: [
-                            'creator'
-                        ]
-                    },
-                    {
-                        category_name: "Jeux de rôle",
-                        category_id: 43,
-                        category_fields: [
-                            'creator'
-                        ]
-                    },
-                ]
-            }
-        ],
+        categories: [],
         borrowSate: {
             lender: {
                 'WA': 'En attente de réponse',
@@ -226,7 +60,7 @@ export default new Vuex.Store({
 
             for(var i in state.categories) {
                 one = state.categories[i];
-                if(one.collection_allowed === true) {
+                if(one.category_allow_collection === 1) {
                     collectionCategories.push(one);
                 }
             }
@@ -239,7 +73,15 @@ export default new Vuex.Store({
         // Récupère la liste des états pour les emprunts
         getBorrowSate: (state) => (type) => state.borrowSate[type],
     },
-    mutations: {},
-    actions: {},
+    mutations: {
+        SET_CAT(state, payload) {
+            state.categories = payload;
+        }
+    },
+    actions: {
+        setCategories({ commit }, categories) {
+            commit('SET_CAT', categories);
+        }
+    },
     modules: {}
 });

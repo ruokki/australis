@@ -158,7 +158,7 @@ export default {
                 let allSub = this.getCategory(this.newItem.category_id);
                 for(var i in allSub.children) {
                     if(this.type == 'collection') { 
-                        if(allSub.children[i].collection_allowed == true) {
+                        if(allSub.children[i].category_allow_collection == 1) {
                             optGroup.push({
                                 label: allSub.children[i].category_name,
                                 value: allSub.children[i].category_id
@@ -207,7 +207,7 @@ export default {
         alertOneShot: function() {
             if(this.newItem.category_id > 0) {
                 let cat = this.getCategory(this.newItem.category_id);
-                if(cat.collection_allowed === true && this.type == 'item') {
+                if(cat.category_allow_collection === 1 && this.type == 'item') {
                     return true;
                 }
             }

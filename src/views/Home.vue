@@ -83,7 +83,7 @@ export default {
     }
   },
   beforeMount() {
-    this.tab = Array.isArray(this.categories) ? Array.from(this.categories)[0].category_name : "";
+    this.tab = this.categories.length > 0 && Array.isArray(this.categories) ? Array.from(this.categories)[0].category_name : "";
   },
   data() {
     return {
