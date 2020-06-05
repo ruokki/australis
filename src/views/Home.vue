@@ -93,14 +93,7 @@ export default {
   data() {
     return {
       tab: "",
-      itemsBySub: {
-        11: 8,
-        12: 5,
-        13: 2,
-        21: 5,
-        22: 8,
-        23: 12
-      },
+      itemsBySub: {},
 
       // Définition des tableaux
       lendCols: [
@@ -115,75 +108,19 @@ export default {
       ],
 
       // Data des tableaux
-      lends: [
-        {
-          borrow_id: 1,
-          item_name: "Truc du truc",
-          user_name: "Jean Michel",
-          borrow_duration: 20
-        },
-        {
-          borrow_id: 2,
-          item_name: "Album de truc",
-          user_name: "Jean Guy",
-          borrow_duration: 10
-        },
-        {
-          borrow_id: 3,
-          item_name: "Truc du truc",
-          user_name: "Jean michel",
-          borrow_duration: 20
-        },
-        {
-          borrow_id: 4,
-          item_name: "Truc du truc",
-          user_name: "Jean michel",
-          borrow_duration: 20
-        },
-        {
-          borrow_id: 5,
-          item_name: "Truc du truc",
-          user_name: "Jean michel",
-          borrow_duration: 1
-        }
-      ],
-      borrows: [
-        {
-          borrow_id: 1,
-          item_name: "Truc du truc",
-          user_name: "Jean Michel",
-          borrow_date_end: new Date()
-        },
-        {
-          borrow_id: 2,
-          item_name: "Album de truc",
-          user_name: "Jean Guy",
-          borrow_date_end: new Date()
-        },
-        {
-          borrow_id: 3,
-          item_name: "Truc du truc",
-          user_name: "Jean michel",
-          borrow_date_end: new Date()
-        },
-        {
-          borrow_id: 4,
-          item_name: "Truc du truc",
-          user_name: "Jean michel",
-          borrow_date_end: new Date()
-        },
-        {
-          borrow_id: 5,
-          item_name: "Truc du truc",
-          user_name: "Jean michel",
-          borrow_date_end: new Date()
-        },
-      ],
+      lends: [],
+      borrows: [],
     }
   },
   created() {
       axios.get(this.getAPI + '/category/repartItemByUser')
         .then(response => this.itemsBySub = response.data);
+
+      axios.get(this.getAPI + '/borrow/runningBorrow')
+        .then(response => this.borrows = response.data);
+
+      axios.get(this.getAPI + '/borrow/waitingLend')
+        .then(response => this.lends = response.data);
   }
 }
 </script>
