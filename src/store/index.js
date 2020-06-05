@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+        apiUrl: "http://localhost/dev/arctica/public/index.php",
         tooltip: {
             transition: "scale",
             class: "bg-primary text-body1"
@@ -72,6 +73,7 @@ export default new Vuex.Store({
         tooltipClass: (state) => state.tooltip.class,
         // Récupère la liste des états pour les emprunts
         getBorrowSate: (state) => (type) => state.borrowSate[type],
+        getAPI: (state) => state.apiUrl
     },
     mutations: {
         SET_CAT(state, payload) {

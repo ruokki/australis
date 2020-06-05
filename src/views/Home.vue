@@ -71,6 +71,8 @@
 <script>
 import moment from 'moment';
 import ItemList from './ItemList.vue';
+import axios from 'axios';
+import { mapGetters } from 'vuex';
 
 export default {
   name: 'Home',
@@ -80,7 +82,10 @@ export default {
   computed: {
     categories() {
       return this.$store.getters.getAllCategories;
-    }
+    },
+    ...mapGetters([
+      'getAPI'
+    ])
   },
   beforeMount() {
     this.tab = this.categories.length > 0 && Array.isArray(this.categories) ? Array.from(this.categories)[0].category_name : "";
@@ -175,6 +180,10 @@ export default {
         },
       ],
     }
+  },
+  created() {
+      axios.get(this.getAPI + '/category/repartItemByUser')
+        .then(response => this.itemsBySub = response.data);
   }
 }
 </script>

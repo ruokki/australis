@@ -10,6 +10,7 @@
 <script>
 import Menu from './views/Menu.vue';
 import axios from 'axios';
+import { mapGetters } from 'vuex';
 
 export default {
   name: "App",
@@ -22,13 +23,18 @@ export default {
       this.$store.dispatch('setCategories', response.data); 
     }
   },
+  computed: {
+    ...mapGetters([
+      'getAPI'
+    ])
+  },
 
   data() {
     return {
     };
   },
   created() {
-    axios.get('http://localhost/dev/arctica/public/index.php/getCategories')
+    axios.get(this.getAPI + '/category/all')
       .then(this.updateCategories);
   }
 };
