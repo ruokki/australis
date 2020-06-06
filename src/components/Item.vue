@@ -5,13 +5,19 @@
         @mouseleave="front = false"
     >
         <div class="background">
-            <q-img :src="item.img" :ratio="1" />
+            <q-img :src="item.full_path_img" :ratio="1" >
+                 <template v-slot:error>
+                    <div class="absolute-full flex flex-center bg-negative text-white">
+                    Erreur lors du chargement de l'image
+                    </div>
+                </template>
+            </q-img>
         </div>
         <div class="front fit column justify-around item-center" @click="seeItem">
             <div>
-                <div class="text-center text-h5">{{ item.name }}</div>
-                <div class="text-center" v-if="item.category_icon">
-                    <q-icon size="md" :name="item.category_icon" >
+                <div class="text-center text-h5">{{ item.item_name }}</div>
+                <div class="text-center" v-if="item.category.category_icon">
+                    <q-icon size="md" :name="item.category.category_icon" >
                         <q-tooltip 
                             v-if="item.category_path"
                             :transition-show="tooltipTransition"
