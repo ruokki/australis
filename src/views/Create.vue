@@ -113,6 +113,7 @@
 <script>
 import { mapGetters } from 'vuex';
 import ItemInfo from '../components/ItemInfo.vue';
+import axios from 'axios';
 
 export default {
     name: "Create",
@@ -125,7 +126,8 @@ export default {
             'getAllCategories',
             'getCollectionCategories',
             'getCategory',
-            'getSubCategory'
+            'getSubCategory',
+            'getAPI'
         ]),
         // Titre de la page
         title: function() {
@@ -262,11 +264,15 @@ export default {
             /**
              * @TODO Envoyer une requête pour enregistrer l'item en base
              */
-            console.log(this.newItem);
-            this.$q.notify({
-                type: 'positive',
-                message: "Item enregistré"
-            });
+            var thos = this;
+            axios.post(this.getAPI + '/item/set', this.newItem)
+                .then(function(response) {
+                    console.log(response);
+                    thos.$q.notify({
+                        type: 'positive',
+                        message: "Item enregistré"
+                    });
+                });
         },
         // Génère les clés pour les checkboxes en fonction de l'idx de la ligne
         getRowInfo: function(currentIdx) {

@@ -60,20 +60,23 @@
             <q-input v-if="one.field_type == 'text'" 
                 :label="one.field_label" 
                 debounce="500"
-                v-model="item['item_' + one.field_name]" 
+                v-model="item[one.field_name]" 
+                @input="val => setProp(one.field_name, val)"
             />
             <q-input v-else-if="one.field_type == 'number'" 
                 type="number" 
                 debounce="500"
                 :label="one.field_label" 
-                v-model="item['item_' + one.field_name]" 
+                v-model="item[one.field_name]" 
+                @input="val => setProp(one.field_name, val)"
             />
             <q-select v-else-if="one.field_type == 'select'" 
                 :label="one.field_label" 
                 :options="one.field_options" 
                 debounce="500"
                 value="" 
-                v-model="item['item_' + one.field_name]" 
+                v-model="item[one.field_name]"
+                @input="val => setProp(one.field_name, val)"
             />
         </div>
     </div>
@@ -103,11 +106,11 @@ export default {
                     throw new TypeError("Aucune sous catégorie n'a été définie");
                 }
                 else {
-                    fields = this.getSubCategory(this.mainCat, this.subCat).category_fields;
+                    fields = this.getSubCategory(this.mainCat, this.subCat).fields;
                 }
             }
             else {
-                fields = this.getSubCategory(this.item.main_category, this.item.sub_category).category_fields;
+                fields = this.getSubCategory(this.item.main_category, this.item.sub_category).fields;
             }
 
             return fields;
@@ -133,20 +136,11 @@ export default {
         }
     },
     data() {
-        return {
-            // Stockage de l'ensemble des infos de l'item
-            infoItem: {
-                item_name: "",
-                item_img: [],
-                item_descript: ""
-            }
-        }
+        return {}
     },
-    created() {
-        let defaultVal;
-        for(var i in this.fields) {
-            defaultVal = "";
-            this.item['item_' + this.fields[i].field_name] = defaultVal;
+    methods: {
+        setProp: function(field, val) {
+            this.$set(this.item, field, val);
         }
     }
 }
