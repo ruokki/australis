@@ -271,11 +271,18 @@ export default {
             axios.post(this.getAPI + '/item/set', formData, {
                 'Content-Type': "multipart/form-data"
             }).then(function(response) {
-                    console.log(response.data);
-                    thos.$q.notify({
-                        type: 'positive',
-                        message: "Item enregistré"
-                    });
+                    if(response.data.error === true) {
+                        thos.$q.notify({
+                            type: 'negative',
+                            message: "Erreur dans le formulaire"
+                        });
+                    }
+                    else {
+                        thos.$q.notify({
+                            type: 'positive',
+                            message: "Item enregistré"
+                        });
+                    }
                 });
         },
         // Génère les clés pour les checkboxes en fonction de l'idx de la ligne
