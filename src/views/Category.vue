@@ -8,13 +8,14 @@
             <q-btn flat round dense icon="search" class="q-mr-xs" />
         </q-toolbar>
         <div class="container q-pa-md row">
-            <ItemList />
+            <ItemList :items="allItems" />
         </div>
     </q-page>
 </template>
 <script>
 import ItemList from './ItemList.vue';
 import { mapGetters } from 'vuex';
+import axios from 'axios';
 
 export default {
     name: "Category",
@@ -25,7 +26,8 @@ export default {
     computed: {
         ...mapGetters([
             'getCategory',
-            'getSubCategory'
+            'getSubCategory',
+            'getAPI'
         ]),
         fullCategory: function() {
             if(this.main == 'mine') {
@@ -43,7 +45,8 @@ export default {
         return {
             mainName: "main",
             subName: "sub",
-            icon: ""
+            icon: "",
+            allItems: []
         };
     },
     methods: {
@@ -68,6 +71,13 @@ export default {
                  * @param Catégorie principale main
                  * @param Catégorie enfante sub
                  */
+                var thos = this;
+                axios.get(this.getAPI + '/category/' + sub.category_id)
+                    .then(function(response){
+                        console.log(response);
+                        thos.allItems = response.data;
+                    });
+
             }
 
         }

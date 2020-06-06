@@ -165,7 +165,6 @@ export default {
     },
     methods: {
         setProp: function(field, val) {
-            console.log(this.errors[field]);
             if(this.errors[field] !== "undefined") {
                 delete this.errors[field];
             }
