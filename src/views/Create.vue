@@ -261,13 +261,17 @@ export default {
         },
         // Enregistrement de l'item sur le serveur
         saveItem: function() {
-            /**
-             * @TODO Envoyer une requête pour enregistrer l'item en base
-             */
-            var thos = this;
-            axios.post(this.getAPI + '/item/set', this.newItem)
-                .then(function(response) {
-                    console.log(response);
+            var thos = this,
+                formData = new FormData();
+            
+            for(var i in this.newItem) {
+                formData.append(i, this.newItem[i]);
+            }
+
+            axios.post(this.getAPI + '/item/set', formData, {
+                'Content-Type': "multipart/form-data"
+            }).then(function(response) {
+                    console.log(response.data);
                     thos.$q.notify({
                         type: 'positive',
                         message: "Item enregistré"
