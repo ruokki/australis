@@ -51,6 +51,8 @@
                         :mainCat="this.newItem.category_id" 
                         :subCat="this.newItem.subcategory_id" 
                         :item="newItem"
+                        :collection="type == 'collection'"
+                        :errors="fieldsInError"
                     />
                     <q-input v-if="type == 'collection'" 
                         type="number" 
@@ -243,10 +245,13 @@ export default {
             // On sélectionne par défaut tout les tomes
             allTome: false,
             // Nombre de checkbox par ligne
-            nbCheckPerLine: 3
+            nbCheckPerLine: 3,
+            // Champs en erreur après enregistrement
+            fieldsInError: {}
         }
     },
     methods: {
+        // Gestion des expansion item
         updateSee: function(from) {
             if(from == 'sub') {
                 this.seeCategory = false;
@@ -272,6 +277,7 @@ export default {
                 'Content-Type': "multipart/form-data"
             }).then(function(response) {
                     if(response.data.error === true) {
+                        thos.fieldsInError = response.data.errors;
                         thos.$q.notify({
                             type: 'negative',
                             message: "Erreur dans le formulaire"
@@ -282,6 +288,7 @@ export default {
                             type: 'positive',
                             message: "Item enregistré"
                         });
+                        thos.resetData();
                     }
                 });
         },
@@ -304,10 +311,9 @@ export default {
             else {
                 this.allTome = null;
             }
-        }
-    },
-    watch: {
-        'type': function() {
+        },
+        // Reset des variables dans le data
+        resetData: function() {
             this.newItem = {
                 category_id: 0,
                 subcategory_id: 0,
@@ -317,6 +323,12 @@ export default {
             this.seeCategory = true,
             this.seeSub = false;
             this.seeInfo = false;
+            this.fieldsInError = {};
+        }
+    },
+    watch: {
+        'type': function() {
+            this.resetData();
         },
         'allTome': function(newVal) {
             if(newVal == true) {

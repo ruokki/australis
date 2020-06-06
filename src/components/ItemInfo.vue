@@ -23,44 +23,12 @@
         </q-list>
     </div>
     <div v-else>
-         <q-input 
-            label="Nom" 
-            debounce="500"
-            v-model="item.item_name" 
-        />
-         <q-file 
-            label="Image" 
-            v-model="item.item_img" 
-            accept=".jpg, .png, image/*"
-        >
-            <template v-slot:append>
-                <q-icon name="attachment" />
-            </template>
-            <template v-slot:file="{ index, file }">
-                <q-chip
-                class="full-width q-my-xs"
-                square
-                >
-                    <q-avatar>
-                        <q-icon name="photo" />
-                    </q-avatar>
-                    <div class="ellipsis relative-position">
-                        {{ file.name }}
-                    </div>
-                </q-chip>
-            </template>
-        </q-file>
-        <q-input 
-            type="textarea" 
-            label="Description" 
-            debounce="500"
-            v-model="item.item_descript" 
-        />
         <div v-for="(one, key) in fields" :key="key" >
             <q-input v-if="one.field_type == 'text'" 
                 :label="one.field_label" 
                 debounce="500"
                 v-model="item[one.field_name]" 
+                :error="typeof(errors[one.field_name]) !== 'undefined'"
                 @input="val => setProp(one.field_name, val)"
             />
             <q-input v-else-if="one.field_type == 'number'" 
@@ -68,6 +36,7 @@
                 debounce="500"
                 :label="one.field_label" 
                 v-model="item[one.field_name]" 
+                :error="typeof(errors[one.field_name]) !== 'undefined'"
                 @input="val => setProp(one.field_name, val)"
             />
             <q-select v-else-if="one.field_type == 'select'" 
@@ -76,6 +45,41 @@
                 debounce="500"
                 value="" 
                 v-model="item[one.field_name]"
+                :error="typeof(errors[one.field_name]) !== 'undefined'"
+                @input="val => setProp(one.field_name, val)"
+            />
+            <q-file 
+                v-else-if="one.field_type == 'file'" 
+                :label="one.field_label" 
+                v-model="item[one.field_name]" 
+                accept=".jpg, .png, image/*"
+                :error="typeof(errors[one.field_name]) !== 'undefined'"
+                @input="val => setProp(one.field_name, val)"
+            >
+                <template v-slot:append>
+                    <q-icon name="attachment" />
+                </template>
+                <template v-slot:file="{ index, file }">
+                    <q-chip
+                    class="full-width q-my-xs"
+                    square
+                    >
+                        <q-avatar>
+                            <q-icon name="photo" />
+                        </q-avatar>
+                        <div class="ellipsis relative-position">
+                            {{ file.name }}
+                        </div>
+                    </q-chip>
+                </template>
+            </q-file>
+            <q-input 
+                v-else-if="one.field_type == 'textarea'" 
+                type="textarea" 
+                :label="one.field_label" 
+                debounce="500"
+                v-model="item[one.field_name]" 
+                :error="typeof(errors[one.field_name]) !== 'undefined'"
                 @input="val => setProp(one.field_name, val)"
             />
         </div>
@@ -93,7 +97,23 @@ export default {
         ]),
         // Liste des champs à afficher pour la catégorie/sous catégorie indiquée
         fields: function() {
-            let fields;
+            let fields = [
+                {
+                    field_label: "Nom",
+                    field_name: "item_name",
+                    field_type: "text"
+                },
+                {
+                    field_label: "Image",
+                    field_name: "item_img",
+                    field_type: "file"
+                },
+                {
+                    field_label: "Description",
+                    field_name: "item_descript",
+                    field_type: "textarea"
+                }
+            ];
 
             if(this.form == true) {
                 if(this.mainCat == 0 || this.subCat == 0) {
@@ -106,11 +126,11 @@ export default {
                     throw new TypeError("Aucune sous catégorie n'a été définie");
                 }
                 else {
-                    fields = this.getSubCategory(this.mainCat, this.subCat).fields;
+                    fields = fields.concat(this.getSubCategory(this.mainCat, this.subCat).fields);
                 }
             }
             else {
-                fields = this.getSubCategory(this.item.main_category, this.item.sub_category).fields;
+                fields = fields.concat(this.getSubCategory(this.item.main_category, this.item.sub_category).fields);
             }
 
             return fields;
@@ -133,13 +153,23 @@ export default {
         subCat: {
             type: Number,
             default: -1
-        }
+        },
+        errors: {
+            type: Object,
+            default: function() { return {}; }
+        },
+        collection: Boolean
     },
     data() {
         return {}
     },
     methods: {
         setProp: function(field, val) {
+            console.log(this.errors[field]);
+            if(this.errors[field] !== "undefined") {
+                delete this.errors[field];
+            }
+
             this.$set(this.item, field, val);
         }
     }
