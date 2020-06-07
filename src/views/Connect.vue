@@ -36,10 +36,13 @@
                 <q-toolbar-title>Créer un compte</q-toolbar-title>
             </q-toolbar>
             <q-card-section>
-                <q-input v-model="newUser.name" label="Nom d'utilisateur" />
+                <q-input v-model="newUser.name" ref="user" label="Nom d'utilisateur" :rules="[ nameValidation ]" lazy-rules />
                     <q-input 
                         v-model="newUser.pwd" 
                         label="Mot de passe" 
+                        ref="pass"
+                        :rules="[ nameValidation ]" 
+                        lazy-rules
                         :type="isPwd ? 'password' : 'text'"
                     >
                         <template v-slot:append>
@@ -50,13 +53,13 @@
                             />
                         </template>
                 </q-input>
-                <q-input v-model="newUser.lastname" label="Nom" />
-                <q-input v-model="newUser.firstname" label="Prénom" />
-                <q-input v-model="newUser.email" label="Email" />
+                <q-input v-model="newUser.lastname" lazy-rules ref="lastname" label="Nom" :rules="[ nameValidation ]"  />
+                <q-input v-model="newUser.firstname" lazy-rules ref="firstname" label="Prénom" :rules="[ nameValidation ]" />
+                <q-input v-model="newUser.email" lazy-rules ref="email" :rules="[ validateEmail ]" label="Email" />
             </q-card-section>
 
             <q-card-actions class="bg-grey-4 justify-between text-primary">
-                <q-btn flat label="Retour"  @click="step = 'signin'" />
+                <q-btn flat label="Retour" @click="step = 'signin'" />
                 <q-btn flat label="Créer" @click="create" />
             </q-card-actions>
         </q-card>
@@ -84,17 +87,67 @@ export default {
         }
     },
     methods: {
+        validateEmail(val) {
+            let regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+            if(val == '') {
+                return 'Champ obligatoire';
+            }
+            else if(regex.test(val)) {
+                return true;
+            }
+            else {
+                return 'Format incorrect';
+            }
+        },
+        nameValidation(val) {
+            if(val.length > 100) {
+                return 'Longueur maximale de 100 caractères';
+            }
+            else if(val == '') {
+                return 'Champ obligatoire';
+            }
+            else {
+                return true;
+            }
+        },
         create() {
+            this.$refs.user.validate();
+            this.$refs.pass.validate();
+            this.$refs.lastname.validate();
+            this.$refs.firstname.validate();
+            this.$refs.email.validate();
 
+            if (
+                this.$refs.user.hasError || 
+                this.$refs.pass.hasError || 
+                this.$refs.lastname.hasError || 
+                this.$refs.firstname.hasError || 
+                this.$refs.email.hasError
+            ) {
+                this.$q.notify({
+                    icon: "warning",
+                    message: "Erreurs dans le formulaire",
+                    color: "negative"
+                })
+            }
         },
         connectMe() {
-            
+
         }
     },
     watch: {
         'step': function() {
             this.isPwd = true;
             this.isPwdConnect = true;
+            this.newUser = {
+                name: "",
+                firstname: "",
+                lastname: "",
+                pwd: "",
+                email: ""
+            };
+            this.user = "";
+            this.pwd = "";
         }
     }
 }
