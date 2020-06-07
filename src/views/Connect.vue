@@ -128,7 +128,33 @@ export default {
                     icon: "warning",
                     message: "Erreurs dans le formulaire",
                     color: "negative"
-                })
+                });
+            }
+            else {
+                let formData = new FormData();
+                for(var i in this.newUser) {
+                    formData.append(i, this.newUser[i]);
+                }
+
+                var thos = this;
+                this.$api.post('user/create', formData)
+                    .then(function(response){
+                        if(response.data.error === true) {
+                            let keys = Object.keys(response.data.errors);
+                            thos.$q.notify({
+                                icon: "warning",
+                                message: response.data.errors[keys[0]],
+                                color: "negative"
+                            });
+                        }
+                        else {
+                            thos.$q.notify({
+                                message: "Utilisateur créé",
+                                color: "positive"
+                            });
+                            thos.step = 'signin';
+                        }
+                    });
             }
         },
         connectMe() {
