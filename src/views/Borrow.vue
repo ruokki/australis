@@ -224,7 +224,11 @@ export default {
         },
     },
     methods: {
-
+        updateDatas: function() {
+            let url = this.type === 'borrower' ? 'borrow/mine' : 'lend/mine';
+            this.$api.get(url)
+                .then(response => this.datas = response.data);
+        }
     },
     data() {
         return {
@@ -252,180 +256,16 @@ export default {
                 { name: "date_end", label: "Date de fin", field: "borrow_date_end", format: (val) => moment(val).format('DD/MM/YYYY') },
                 { name: "action", label: "Actions", field: "borrow_id"},
             ],
-            datas: [
-                {
-                    item_name: "Truc",
-                    user_name: "Jean Mich",
-                    borrow_date_create: new Date(),
-                    borrow_state: "WA",
-                    borrow_date_start: new Date(),
-                    borrow_date_end: new Date(),
-                    borrow_id: 1
-                },
-                {
-                    item_name: "Truc",
-                    user_name: "Jean Mich",
-                    borrow_date_create: new Date(),
-                    borrow_state: "TB",
-                    borrow_date_start: new Date(),
-                    borrow_date_end: new Date(),
-                    borrow_id: 1
-                },
-                {
-                    item_name: "Truc",
-                    user_name: "Jean Mich",
-                    borrow_date_create: new Date(),
-                    borrow_state: "BO",
-                    borrow_date_start: new Date(),
-                    borrow_date_end: new Date(),
-                    borrow_id: 1
-                },
-                {
-                    item_name: "Truc",
-                    user_name: "Jean Mich",
-                    borrow_date_create: new Date(),
-                    borrow_state: "AR",
-                    borrow_date_start: new Date(),
-                    borrow_date_end: new Date(),
-                    borrow_id: 1
-                },
-                {
-                    item_name: "Truc",
-                    user_name: "Jean Mich",
-                    borrow_date_create: new Date(),
-                    borrow_state: "GB",
-                    borrow_date_start: new Date(),
-                    borrow_date_end: new Date(),
-                    borrow_id: 1
-                },
-                {
-                    item_name: "Truc",
-                    user_name: "Jean Mich",
-                    borrow_date_create: new Date(),
-                    borrow_state: "DE",
-                    borrow_date_start: new Date(),
-                    borrow_date_end: new Date(),
-                    borrow_id: 1
-                },
-                {
-                    item_name: "Truc",
-                    user_name: "Jean Mich",
-                    borrow_date_create: new Date(),
-                    borrow_state: "En attente de réponse",
-                    borrow_date_start: new Date(),
-                    borrow_date_end: new Date(),
-                    borrow_id: 1
-                },
-                {
-                    item_name: "Truc",
-                    user_name: "Jean Mich",
-                    borrow_date_create: new Date(),
-                    borrow_state: "En attente de réponse",
-                    borrow_date_start: new Date(),
-                    borrow_date_end: new Date(),
-                    borrow_id: 1
-                },
-                {
-                    item_name: "Truc",
-                    user_name: "Jean Mich",
-                    borrow_date_create: new Date(),
-                    borrow_state: "En attente de réponse",
-                    borrow_date_start: new Date(),
-                    borrow_date_end: new Date(),
-                    borrow_id: 1
-                },
-                {
-                    item_name: "Truc",
-                    user_name: "Jean Mich",
-                    borrow_date_create: new Date(),
-                    borrow_state: "En attente de réponse",
-                    borrow_date_start: new Date(),
-                    borrow_date_end: new Date(),
-                    borrow_id: 1
-                },
-                {
-                    item_name: "Truc",
-                    user_name: "Jean Mich",
-                    borrow_date_create: new Date(),
-                    borrow_state: "En attente de réponse",
-                    borrow_date_start: new Date(),
-                    borrow_date_end: new Date(),
-                    borrow_id: 1
-                },
-                {
-                    item_name: "Truc",
-                    user_name: "Jean Mich",
-                    borrow_date_create: new Date(),
-                    borrow_state: "En attente de réponse",
-                    borrow_date_start: new Date(),
-                    borrow_date_end: new Date(),
-                    borrow_id: 1
-                },
-                {
-                    item_name: "Truc",
-                    user_name: "Jean Mich",
-                    borrow_date_create: new Date(),
-                    borrow_state: "En attente de réponse",
-                    borrow_date_start: new Date(),
-                    borrow_date_end: new Date(),
-                    borrow_id: 1
-                },
-                {
-                    item_name: "Truc",
-                    user_name: "Jean Mich",
-                    borrow_date_create: new Date(),
-                    borrow_state: "En attente de réponse",
-                    borrow_date_start: new Date(),
-                    borrow_date_end: new Date(),
-                    borrow_id: 1
-                },
-                {
-                    item_name: "Truc",
-                    user_name: "Jean Mich",
-                    borrow_date_create: new Date(),
-                    borrow_state: "En attente de réponse",
-                    borrow_date_start: new Date(),
-                    borrow_date_end: new Date(),
-                    borrow_id: 1
-                },
-                {
-                    item_name: "Truc",
-                    user_name: "Jean Mich",
-                    borrow_date_create: new Date(),
-                    borrow_state: "En attente de réponse",
-                    borrow_date_start: new Date(),
-                    borrow_date_end: new Date(),
-                    borrow_id: 1
-                },
-                {
-                    item_name: "Truc",
-                    user_name: "Jean Mich",
-                    borrow_date_create: new Date(),
-                    borrow_state: "En attente de réponse",
-                    borrow_date_start: new Date(),
-                    borrow_date_end: new Date(),
-                    borrow_id: 1
-                },
-                {
-                    item_name: "Truc",
-                    user_name: "Jean Mich",
-                    borrow_date_create: new Date(),
-                    borrow_state: "En attente de réponse",
-                    borrow_date_start: new Date(),
-                    borrow_date_end: new Date(),
-                    borrow_id: 1
-                },
-                {
-                    item_name: "Truc",
-                    user_name: "Jean Mich",
-                    borrow_date_create: new Date(),
-                    borrow_state: "En attente de réponse",
-                    borrow_date_start: new Date(),
-                    borrow_date_end: new Date(),
-                    borrow_id: 1
-                }
-            ]
+            datas: []
         };
+    },
+    mounted() {
+        this.updateDatas();
+    },
+    watch: {
+        'type': function() {
+            this.updateDatas();
+        }
     }
 }
 </script>
