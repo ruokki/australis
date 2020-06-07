@@ -53,10 +53,8 @@ export default {
         updateCategory: function() {
             if(this.main == 'mine') {
                 this.icon = 'account_balance';
-                /**
-                 * @TODO Récupération des items de l'utilisateur
-                 * @param Catégorie principale main
-                 */
+                axios.get(this.getAPI + '/category/mine')
+                    .then(this.setItem);
             }
             else {
                 let category = this.getCategory(this.main);
@@ -66,20 +64,13 @@ export default {
                 let sub = this.getSubCategory(this.main, this.sub);
                 this.subName = sub.category_name;
 
-                /**
-                 * @TODO Récupération des items correspondants à la catégorie/sous catégorie sélectionnés
-                 * @param Catégorie principale main
-                 * @param Catégorie enfante sub
-                 */
-                var thos = this;
                 axios.get(this.getAPI + '/category/' + sub.category_id)
-                    .then(function(response){
-                        console.log(response);
-                        thos.allItems = response.data;
-                    });
+                    .then(this.setItem);
 
             }
-
+        },
+        setItem: function(response){
+            this.allItems = response.data;
         }
     },
     watch: {
