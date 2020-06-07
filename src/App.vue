@@ -1,6 +1,7 @@
 <template>
   <q-layout view="lHh Lpr lFf">
     <Menu />
+    <Connect />
     <q-page-container>
       <router-view></router-view>
     </q-page-container>
@@ -9,13 +10,15 @@
 
 <script>
 import Menu from './views/Menu.vue';
+import Connect from './views/Connect.vue';
 import { mapGetters } from 'vuex';
 
 export default {
   name: "App",
 
   components: {
-    Menu
+    Menu,
+    Connect
   },
   methods: {
     updateCategories(response) {

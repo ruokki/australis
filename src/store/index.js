@@ -5,6 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
+        user: null,
         tooltip: {
             transition: "scale",
             class: "bg-primary text-body1"
@@ -77,12 +78,18 @@ export default new Vuex.Store({
     mutations: {
         SET_CAT(state, payload) {
             state.categories = payload;
+        },
+        SET_USER(state, payload) {
+            state.user = payload;
         }
     },
     actions: {
         setCategories({ commit }, categories) {
             commit('SET_CAT', categories);
-        }
+        },
+        setUser({ commit }, user) {
+            commit('SET_USER', user);
+        },
     },
     modules: {}
 });
