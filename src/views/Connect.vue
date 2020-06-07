@@ -36,9 +36,9 @@
                 <q-toolbar-title>Créer un compte</q-toolbar-title>
             </q-toolbar>
             <q-card-section>
-                <q-input v-model="newUser.name" ref="user" label="Nom d'utilisateur" :rules="[ nameValidation ]" lazy-rules />
+                <q-input v-model="newUser.user_name" ref="user" label="Nom d'utilisateur" :rules="[ nameValidation ]" lazy-rules />
                     <q-input 
-                        v-model="newUser.pwd" 
+                        v-model="newUser.user_pwd" 
                         label="Mot de passe" 
                         ref="pass"
                         :rules="[ nameValidation ]" 
@@ -53,9 +53,9 @@
                             />
                         </template>
                 </q-input>
-                <q-input v-model="newUser.lastname" lazy-rules ref="lastname" label="Nom" :rules="[ nameValidation ]"  />
-                <q-input v-model="newUser.firstname" lazy-rules ref="firstname" label="Prénom" :rules="[ nameValidation ]" />
-                <q-input v-model="newUser.email" lazy-rules ref="email" :rules="[ validateEmail ]" label="Email" />
+                <q-input v-model="newUser.user_lastname" lazy-rules ref="lastname" label="Nom" :rules="[ nameValidation ]"  />
+                <q-input v-model="newUser.user_firstname" lazy-rules ref="firstname" label="Prénom" :rules="[ nameValidation ]" />
+                <q-input v-model="newUser.user_email" lazy-rules ref="email" :rules="[ validateEmail ]" label="Email" />
             </q-card-section>
 
             <q-card-actions class="bg-grey-4 justify-between text-primary">
@@ -140,11 +140,11 @@ export default {
             this.isPwd = true;
             this.isPwdConnect = true;
             this.newUser = {
-                name: "",
-                firstname: "",
-                lastname: "",
-                pwd: "",
-                email: ""
+                user_name: "",
+                user_firstname: "",
+                user_lastname: "",
+                user_pwd: "",
+                user_email: ""
             };
             this.user = "";
             this.pwd = "";
