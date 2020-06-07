@@ -71,7 +71,6 @@
 <script>
 import moment from 'moment';
 import ItemList from './ItemList.vue';
-import axios from 'axios';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -113,13 +112,13 @@ export default {
     }
   },
   created() {
-      axios.get(this.getAPI + '/category/repartItemByUser')
+      this.$api.get('/category/repartItemByUser')
         .then(response => this.itemsBySub = response.data);
 
-      axios.get(this.getAPI + '/borrow/runningBorrow')
+      this.$api.get('/borrow/running')
         .then(response => this.borrows = response.data);
 
-      axios.get(this.getAPI + '/borrow/waitingLend')
+      this.$api.get('/lend/waiting')
         .then(response => this.lends = response.data);
   }
 }

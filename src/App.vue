@@ -9,7 +9,6 @@
 
 <script>
 import Menu from './views/Menu.vue';
-import axios from 'axios';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -34,7 +33,7 @@ export default {
     };
   },
   created() {
-    axios.get(this.getAPI + '/category/all')
+    this.$api.get('/category/all')
       .then(this.updateCategories);
   }
 };

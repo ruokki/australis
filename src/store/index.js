@@ -5,7 +5,6 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     state: {
-        apiUrl: "http://localhost/dev/arctica/public/index.php",
         tooltip: {
             transition: "scale",
             class: "bg-primary text-body1"

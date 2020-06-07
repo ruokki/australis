@@ -115,7 +115,6 @@
 <script>
 import { mapGetters } from 'vuex';
 import ItemInfo from '../components/ItemInfo.vue';
-import axios from 'axios';
 
 export default {
     name: "Create",
@@ -273,7 +272,7 @@ export default {
                 formData.append(i, this.newItem[i]);
             }
 
-            axios.post(this.getAPI + '/item/set', formData, {
+            this.$api.post('/item/set', formData, {
                 'Content-Type': "multipart/form-data"
             }).then(function(response) {
                     if(response.data.error === true) {

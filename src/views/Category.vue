@@ -15,7 +15,6 @@
 <script>
 import ItemList from './ItemList.vue';
 import { mapGetters } from 'vuex';
-import axios from 'axios';
 
 export default {
     name: "Category",
@@ -53,7 +52,7 @@ export default {
         updateCategory: function() {
             if(this.main == 'mine') {
                 this.icon = 'account_balance';
-                axios.get(this.getAPI + '/category/mine')
+                this.$api.get('/category/mine')
                     .then(this.setItem);
             }
             else {
@@ -64,7 +63,7 @@ export default {
                 let sub = this.getSubCategory(this.main, this.sub);
                 this.subName = sub.category_name;
 
-                axios.get(this.getAPI + '/category/' + sub.category_id)
+                this.$api.get('/category/' + sub.category_id)
                     .then(this.setItem);
 
             }
