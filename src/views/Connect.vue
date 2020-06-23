@@ -67,6 +67,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
+
 export default {
     name: "Connect",
     data() {
@@ -87,6 +89,9 @@ export default {
         }
     },
     methods: {
+        ...mapActions([
+            'setToken'
+        ]),
         validateEmail(val) {
             let regex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
             if(val == '') {
@@ -158,7 +163,34 @@ export default {
             }
         },
         connectMe() {
+            let formData = new FormData();
+            var thos = this;
+            formData.append("user", this.user);
+            formData.append("pwd", this.pwd);
 
+            this.$api.post('user/connect', formData)
+                .then(function(response){
+                    let data = response.data;
+                    if(data.error === true) {
+                        let message = [];
+                        for(var i in data.errors) {
+                            if(Array.isArray(data.errors[i])) {
+                                message = message.concat(data.errors[i]);
+                            }
+                            else {
+                                message.push(data.errors[i]);
+                            }
+                        }
+                        thos.$q.notify({
+                            message: message.join(" "),
+                            color: "negative"
+                        });
+                    }
+                    else {
+                        thos.setToken(data.token);
+                        thos.notConnected = false;
+                    }
+                });
         }
     },
     watch: {
