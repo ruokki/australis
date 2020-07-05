@@ -25,8 +25,7 @@ export default {
     computed: {
         ...mapGetters([
             'getCategory',
-            'getSubCategory',
-            'getAPI'
+            'getSubCategory'
         ]),
         fullCategory: function() {
             if(this.main == 'mine') {

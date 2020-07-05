@@ -83,7 +83,7 @@ export default {
       return this.$store.getters.getAllCategories;
     },
     ...mapGetters([
-      'getAPI'
+      'getToken'
     ])
   },
   beforeMount() {
@@ -112,6 +112,7 @@ export default {
     }
   },
   created() {
+    if(this.$store.getters.getToken !== null) {
       this.$api.get('/category/repartItemByUser')
         .then(response => this.itemsBySub = response.data);
 
@@ -120,6 +121,7 @@ export default {
 
       this.$api.get('/lend/waiting')
         .then(response => this.lends = response.data);
+    }
   }
 }
 </script>

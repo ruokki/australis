@@ -11,8 +11,8 @@ Vue.config.productionTip = false
 Vue.use({
   install (Vue) {
     Vue.prototype.$api = axios.create({
-        baseURL: "http://localhost/dev/arctica/public/index.php/"
-    })
+        baseURL: "http://localhost/dev/arcticaCI/public/index.php/",
+    });
   }
 });
 

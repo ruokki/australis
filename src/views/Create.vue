@@ -127,8 +127,7 @@ export default {
             'getAllCategories',
             'getCollectionCategories',
             'getCategory',
-            'getSubCategory',
-            'getAPI'
+            'getSubCategory'
         ]),
         // Titre de la page
         title: function() {

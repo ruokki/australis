@@ -11,7 +11,6 @@
 <script>
 import Menu from './views/Menu.vue';
 import Connect from './views/Connect.vue';
-import { mapGetters } from 'vuex';
 
 export default {
   name: "App",
@@ -25,12 +24,6 @@ export default {
       this.$store.dispatch('setCategories', response.data); 
     }
   },
-  computed: {
-    ...mapGetters([
-      'getAPI'
-    ])
-  },
-
   data() {
     return {
     };

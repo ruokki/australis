@@ -73,7 +73,8 @@ export default new Vuex.Store({
         tooltipClass: (state) => state.tooltip.class,
         // Récupère la liste des états pour les emprunts
         getBorrowSate: (state) => (type) => state.borrowSate[type],
-        getAPI: (state) => state.apiUrl
+        // Récupération du token après connexion
+        getToken: (state) => state.token
     },
     mutations: {
         SET_CAT(state, payload) {
