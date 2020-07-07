@@ -113,13 +113,13 @@ export default {
   },
   created() {
     if(this.$store.getters.getToken !== null) {
-      this.$api.get('/category/repartItemByUser')
+      this.$api.post('/category/repartItemByUser')
         .then(response => this.itemsBySub = response.data);
 
-      this.$api.get('/borrow/running')
+      this.$api.post('/borrow/running')
         .then(response => this.borrows = response.data);
 
-      this.$api.get('/lend/waiting')
+      this.$api.post('/lend/waiting')
         .then(response => this.lends = response.data);
     }
   }

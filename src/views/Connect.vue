@@ -67,13 +67,12 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
     name: "Connect",
     data() {
         return {
-            notConnected: true,
             isPwd: true,
             isPwdConnect: true,
             user: "",
@@ -86,6 +85,19 @@ export default {
                 email: ""
             },
             step: "signin"
+        }
+    },
+    computed: {
+        ...mapGetters([
+            'getToken'
+        ]),
+        notConnected: function() {
+            if(this.getToken === null) {
+                return true;
+            }
+            else {
+                return false;
+            }
         }
     },
     methods: {
@@ -188,7 +200,6 @@ export default {
                     }
                     else {
                         thos.setToken(data.token);
-                        thos.notConnected = false;
                     }
                 });
         }
