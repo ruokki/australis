@@ -111,9 +111,9 @@ export default {
       borrows: [],
     }
   },
-  created() {
-    if(this.$store.getters.getToken !== null) {
-      this.$api.post('/category/repartItemByUser')
+  methods: {
+    getInfo: function() {
+      this.$api.post('/category/repart')
         .then(response => this.itemsBySub = response.data);
 
       this.$api.post('/borrow/running')
@@ -121,6 +121,18 @@ export default {
 
       this.$api.post('/lend/waiting')
         .then(response => this.lends = response.data);
+    }
+  },
+  created() {
+    if(this.$store.getters.getToken !== null) {
+      this.getInfo();
+    }
+  },
+  watch: {
+    'getToken': function(newVal, oldVal) {
+      if(oldVal === null) {
+        this.getInfo();
+      }
     }
   }
 }
