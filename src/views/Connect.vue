@@ -154,13 +154,13 @@ export default {
                 }
 
                 var thos = this;
-                this.$api.post('user/create', formData)
-                    .then(function(response){
-                        if(response.data.error === true) {
-                            let keys = Object.keys(response.data.errors);
+                this.$api.url('user/create')
+                    .success(function(data){
+                        if(data.error === true) {
+                            let keys = Object.keys(data.errors);
                             thos.$q.notify({
                                 icon: "warning",
-                                message: response.data.errors[keys[0]],
+                                message: data.errors[keys[0]],
                                 color: "negative"
                             });
                         }
@@ -171,18 +171,20 @@ export default {
                             });
                             thos.step = 'signin';
                         }
-                    });
+                    })
+                    .formData()
+                    .send(formData);
             }
         },
         connectMe() {
-            let formData = new FormData();
             var thos = this;
-            formData.append("user", this.user);
-            formData.append("pwd", this.pwd);
+            let send = {
+                'user': this.user,
+                'pwd': this.pwd
+            };
 
-            this.$api.post('user/connect', formData)
-                .then(function(response){
-                    let data = response.data;
+            this.$api.url('user/connect')
+                .success(data => {
                     if(data.error === true) {
                         let message = [];
                         for(var i in data.errors) {
@@ -201,7 +203,8 @@ export default {
                     else {
                         thos.setToken(data.token);
                     }
-                });
+                })
+                .send(send);
         }
     },
     watch: {

@@ -113,14 +113,17 @@ export default {
   },
   methods: {
     getInfo: function() {
-      this.$api.post('/category/repart')
-        .then(response => this.itemsBySub = response.data);
+      this.$api.url('category/repart')
+        .success(data => this.itemsBySub = data)
+        .send();
 
-      this.$api.post('/borrow/running')
-        .then(response => this.borrows = response.data);
+      this.$api.url('borrow/running')
+        .success(data => this.borrows = data)
+        .send();
 
-      this.$api.post('/lend/waiting')
-        .then(response => this.lends = response.data);
+      this.$api.url('lend/waiting')
+        .success(data => this.lends = data)
+        .send();
     }
   },
   created() {

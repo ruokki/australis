@@ -20,8 +20,8 @@ export default {
     Connect
   },
   methods: {
-    updateCategories(response) {
-      this.$store.dispatch('setCategories', response.data); 
+    updateCategories(data) {
+      this.$store.dispatch('setCategories', data); 
     }
   },
   data() {
@@ -29,8 +29,9 @@ export default {
     };
   },
   created() {
-    this.$api.get('/category/all')
-      .then(this.updateCategories);
+    this.$api.url('category/all')
+      .success(this.updateCategories)
+      .send();
   }
 };
 </script>

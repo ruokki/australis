@@ -226,8 +226,9 @@ export default {
     methods: {
         updateDatas: function() {
             let url = this.type === 'borrower' ? 'borrow/mine' : 'lend/mine';
-            this.$api.post(url)
-                .then(response => this.datas = response.data);
+            this.$api.url(url)
+                .success(data => this.datas = data)
+                .send();
         }
     },
     data() {

@@ -51,8 +51,9 @@ export default {
         updateCategory: function() {
             if(this.main == 'mine') {
                 this.icon = 'account_balance';
-                this.$api.post('/category/mine')
-                    .then(this.setItem);
+                this.$api.url('category/mine')
+                    .success(this.setItem)
+                    .send();
             }
             else {
                 let category = this.getCategory(this.main);
@@ -62,13 +63,14 @@ export default {
                 let sub = this.getSubCategory(this.main, this.sub);
                 this.subName = sub.category_name;
 
-                this.$api.post('/category/' + sub.category_id)
-                    .then(this.setItem);
+                this.$api.url('category/' + sub.category_id)
+                    .success(this.setItem)
+                    .send();
 
             }
         },
-        setItem: function(response){
-            this.allItems = response.data;
+        setItem: function(data){
+            this.allItems = data;
         }
     },
     watch: {

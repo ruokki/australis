@@ -3,7 +3,7 @@ import App from './App.vue'
 import './registerServiceWorker'
 import router from './router'
 import './quasar'
-import './axios'
+import './ajax'
 import store from './store'
 
 
