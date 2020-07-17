@@ -271,11 +271,11 @@ export default {
                 formData.append(i, this.newItem[i]);
             }
 
-            this.$api.post('/item/set', formData, {
-                'Content-Type': "multipart/form-data"
-            }).then(function(response) {
-                    if(response.data.error === true) {
-                        thos.fieldsInError = response.data.errors;
+            this.$api.url('item/set')
+                .formData()
+                .success(function(data) {
+                    if(data.error === true) {
+                        thos.fieldsInError = data.errors;
                         thos.$q.notify({
                             type: 'negative',
                             message: "Erreur dans le formulaire"
@@ -288,7 +288,8 @@ export default {
                         });
                         thos.resetData();
                     }
-                });
+                })
+                .send(formData);
         },
         // Génère les clés pour les checkboxes en fonction de l'idx de la ligne
         getRowInfo: function(currentIdx) {
