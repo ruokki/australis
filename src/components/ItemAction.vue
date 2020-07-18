@@ -1,5 +1,5 @@
 <template>
-    <q-icon v-if="onlyBorrow" size="sm" class="q-px-sm cursor-pointer" name="shopping_cart" @click.stop="borrowMe" >
+    <q-icon v-if="onlyBorrow && borrowable" size="sm" class="q-px-sm cursor-pointer" name="shopping_cart" @click.stop="borrowMe" >
         <q-tooltip 
             :transition-show="tooltipTransition"
             :transition-hide="tooltipTransition"
