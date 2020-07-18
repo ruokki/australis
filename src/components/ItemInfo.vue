@@ -33,6 +33,13 @@
             >
                 <template v-slot:append>
                     <q-toggle
+                        v-if="collection"
+                        v-model="item.collection_running"
+                        label="En cours"
+                        unchecked-icon="clear"
+                        checked-icon="check"
+                    />
+                    <q-toggle
                         v-if="!collection"
                         v-model="item.item_possessed"
                         label="Possédé"
