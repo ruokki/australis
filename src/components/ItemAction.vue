@@ -9,7 +9,7 @@
                 Emprunter l'item
             </q-tooltip>
         </q-icon>
-        <q-dialog v-model="dialogPossessor">
+        <q-dialog v-model="dialogPossessor" @hide="resetBorrowTo">
                 <q-card>
                     <q-toolbar>
                         <q-toolbar-title>Choix du possesseur</q-toolbar-title>
@@ -93,7 +93,7 @@ export default {
     data() {
         return {
             borrow: false,
-            dialogPossessor: true,
+            dialogPossessor: false,
             borrowTo: []
         };
     },
@@ -227,6 +227,12 @@ export default {
                     message: "Veuillez choisir au moins un utilisateur"
                 });
             }
+        },
+        /**
+         * Réinitialise le tableau des utilisateurs auprès desquel faire une demande d'emprunt
+         */
+        resetBorrowTo: function() {
+            this.borrowTo = [];
         },
         /**
          * Redirection vers la modification d'un item
