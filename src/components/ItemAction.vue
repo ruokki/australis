@@ -1,13 +1,15 @@
 <template>
-    <q-icon v-if="onlyBorrow" size="sm" class="q-px-sm cursor-pointer" name="shopping_cart" @click.stop="borrowMe" >
-        <q-tooltip 
-            :transition-show="tooltipTransition"
-            :transition-hide="tooltipTransition"
-            :content-class="tooltipClass"
-        >
-            Emprunter l'item
-        </q-tooltip>
-    </q-icon>
+    <span v-if="onlyBorrow">
+        <q-icon v-if="!possessed" size="sm" class="q-px-sm cursor-pointer" name="shopping_cart" @click.stop="borrowMe" >
+            <q-tooltip 
+                :transition-show="tooltipTransition"
+                :transition-hide="tooltipTransition"
+                :content-class="tooltipClass"
+            >
+                Emprunter l'item
+            </q-tooltip>
+        </q-icon>
+    </span>
     <q-btn-group flat v-else-if="possessed">
         <q-btn icon="edit">
             <q-tooltip 
@@ -48,15 +50,6 @@
         </q-btn>
     </q-btn-group>
     <q-btn-group flat v-else>
-        <q-btn v-if="borrowable" icon="shopping_cart" @click.stop="borrowMe" >
-            <q-tooltip 
-                :transition-show="tooltipTransition"
-                :transition-hide="tooltipTransition"
-                :content-class="tooltipClass"
-            >
-                Emprunter l'item
-            </q-tooltip>
-        </q-btn>
         <q-btn icon="check_box_outline_blank" @click.stop="toReserve">
             <q-tooltip 
                 :transition-show="tooltipTransition"
