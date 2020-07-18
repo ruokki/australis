@@ -50,12 +50,17 @@ export default {
     },
     methods: {
         updateCategory: function() {
-            let category = this.getCategory(this.main);
-            this.mainName = category.category_name;
-            this.icon = category.category_icon;
+            let category;
+            let sub;
+            if(this.main != "mine") {
+                category = this.getCategory(this.main);
+                this.mainName = category.category_name;
+                this.icon = category.category_icon;
+    
+                sub = this.getSubCategory(this.main, this.sub);
+                this.subName = sub.category_name;
+            }
 
-            let sub = this.getSubCategory(this.main, this.sub);
-            this.subName = sub.category_name;
             if(this.$store.getters.getToken !== null) {
                 if(this.main == 'mine') {
                     this.icon = 'account_balance';
