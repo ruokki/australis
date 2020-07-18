@@ -24,7 +24,24 @@
     </div>
     <div v-else>
         <div v-for="(one, key) in fields" :key="key" >
-            <q-input v-if="one.field_type == 'text'" 
+            <q-input v-if="one.field_name == 'item_name'" 
+                :label="one.field_label" 
+                debounce="500"
+                v-model="item[one.field_name]" 
+                :error="typeof(errors[one.field_name]) !== 'undefined'"
+                @input="val => setProp(one.field_name, val)"
+            >
+                <template v-slot:append>
+                    <q-toggle
+                        v-if="!collection"
+                        v-model="item.item_possessed"
+                        label="Possédé"
+                        unchecked-icon="clear"
+                        checked-icon="check"
+                    />
+                </template>
+            </q-input>
+            <q-input v-else-if="one.field_type == 'text'" 
                 :label="one.field_label" 
                 debounce="500"
                 v-model="item[one.field_name]" 
@@ -49,7 +66,7 @@
                 @input="val => setProp(one.field_name, val)"
             />
             <q-file 
-                v-else-if="one.field_type == 'file'" 
+                v-else-if="!collection && one.field_type == 'file'" 
                 :label="one.field_label" 
                 v-model="item[one.field_name]" 
                 accept=".jpg, .png, image/*"

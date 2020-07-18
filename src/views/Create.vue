@@ -64,13 +64,6 @@
                             <q-icon name="list" class="cursor-pointer" @click="dialogPossessed = true" />
                         </template>
                     </q-input>
-                    <q-toggle
-                        v-if="type != 'collection'"
-                        v-model="newItem.item_possessed"
-                        label="Possédé"
-                        unchecked-icon="clear"
-                        checked-icon="check"
-                    />
                     <div class="col q-py-md">
                         <q-btn label="Enregistrer" type="submit" color="primary" icon="send" />
                     </div>
@@ -238,7 +231,8 @@ export default {
                 subcategory_id: 0,
                 item_possessed: true,
                 collection_length: '',
-                collection_possessed: []
+                collection_possessed: [],
+                collection_running: false
             },
             // Ouverture auto de l'expansion "Categorie"
             seeCategory: true,

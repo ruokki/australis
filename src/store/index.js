@@ -62,10 +62,11 @@ export default new Vuex.Store({
 
             for(var i in state.categories) {
                 one = state.categories[i];
-                if(one.category_allow_collection === 1) {
+                if(one.category_allow_collection == 1) {
                     collectionCategories.push(one);
                 }
             }
+            console.log(collectionCategories);
             return collectionCategories;
         },
         // Transition CSS pour les tooltips
