@@ -15,7 +15,10 @@
         </div>
         <div class="front fit column justify-around item-center" @click="seeItem">
             <div>
-                <div class="text-center text-h5">{{ item.item_name }}</div>
+                <div class="text-center text-h5">
+                    {{ item.item_name }}
+                    <span v-if="item.collection_id > 0">T{{ item.item_idx_collection }}</span>
+                </div>
                 <div class="text-center" v-if="item.category_icon">
                     <q-icon size="md" :name="item.category_icon" >
                         <q-tooltip 
