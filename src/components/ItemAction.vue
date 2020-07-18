@@ -19,7 +19,7 @@
                 Modifier l'item
             </q-tooltip>
         </q-btn>
-        <q-btn v-if="!item.borrowable" icon="lock_open" @click.stop="setBorrow(true)" >
+        <q-btn v-if="allowBorrow" icon="lock_open" @click.stop="setBorrow(true)" >
             <q-tooltip 
                 :transition-show="tooltipTransition"
                 :transition-hide="tooltipTransition"
@@ -77,10 +77,6 @@ export default {
     props: {
         item: Object,
         button: Boolean,
-        borrow: {
-            type: Boolean,
-            default: false
-        },
         onlyBorrow: {
             type: Boolean,
             default: false
@@ -98,25 +94,45 @@ export default {
             'getMe'
         ]),
         possessed: function() {
-            let imIn = this.item.possessors.filter(elem => elem.user_id == this.getMe);
-            if(imIn.length > 0) {
-                return true;
+            let imIn = this.myPossession();
+            if(imIn == false) {
+                return false;
             }
-            return false;
+            return true;
+        },
+        allowBorrow: function() {
+            let poss = this.myPossession();
+            if(poss === false) {
+                return false;
+            }
+            else {
+                if(poss.item_borrowable == 1) {
+                    return true;
+                }
+
+                return false;
+            }
         }
     },
     methods: {
         // Définit si l'item est empruntable ou non
         setBorrow(borrowable) {
-            this.item.borrowable = borrowable;
-            this.$emit('update', this.item);
-            this.$q.notify({
-                type: 'positive',
-                message: borrowable ? "L'item peut à nouveau être emprunté" : "L'item ne peux plus être emprunter"
-            });
-            /**
-             * @TODO Envoyer requête pour enregistrer l'état "Empruntable"
-             */
+            let thos = this;            
+            this.$api.url('item/borrow/allow')
+                .success(data => {
+                    let idxPoss = this.indexPossession();
+                    if(idxPoss !== -1) {
+                        this.item.possessors[idxPoss].item_borrowable = data.newVal;
+                        thos.$emit('update', this.item);
+                        thos.$q.notify({
+                            type: 'positive',
+                            message: borrowable ? "L'item peut à nouveau être emprunté" : "L'item ne peux plus être emprunté"
+                        });
+                    }
+                })
+                .send({
+                    item: this.item.item_id
+                });
             },
         toReserve(possessed) {
             this.item.possessed = possessed;
@@ -144,6 +160,24 @@ export default {
         editItem() {
             // Redirection vers la page de modification d'un item
             router.push({ path: `/item/${this.item.id}`});
+        },
+        /**
+         * Récupère les infos de possession pour le user courant
+         */
+        myPossession() {
+            let poss = this.item.possessors.filter(elem => elem.user_id == this.getMe);
+            if(poss.length > 0) {
+                return poss[0];
+            }
+            else {
+                return false;
+            }
+        },
+        /**
+         * Récupère l'index des infos de possession pour le user courant
+         */
+        indexPossession() {
+            return this.item.possessors.findIndex(elem => elem.user_id == this.getMe);
         }
     }
 }
