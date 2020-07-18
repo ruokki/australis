@@ -35,9 +35,7 @@
                     <q-toggle
                         v-if="collection"
                         v-model="item.collection_running"
-                        label="En cours"
-                        unchecked-icon="clear"
-                        checked-icon="check"
+                        :label="item.collection_running ? 'Terminé' : 'En cours'"
                     />
                     <q-toggle
                         v-if="!collection"

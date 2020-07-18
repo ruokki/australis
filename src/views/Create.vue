@@ -270,10 +270,13 @@ export default {
                 formData = new FormData();
             
             for(var i in this.newItem) {
-                formData.append(i, this.newItem[i]);
+                formData.append(
+                    this.type == 'collection' ? i.replace('item_', 'collection_') : i, 
+                    this.newItem[i]
+                );
             }
-
-            this.$api.url('item/set')
+            
+            this.$api.url((this.type == 'collection' ? 'collection' : 'item') + '/set')
                 .formData()
                 .success(function(data) {
                     if(data.error === true) {
