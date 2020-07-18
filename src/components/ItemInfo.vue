@@ -147,11 +147,11 @@ export default {
         item: Object,
         form: Boolean,
         mainCat: {
-            type: Number,
+            type: [Number, String],
             default: -1
         },
         subCat: {
-            type: Number,
+            type: [Number, String],
             default: -1
         },
         errors: {
