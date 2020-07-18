@@ -202,6 +202,7 @@ export default {
                     }
                     else {
                         thos.setToken(data.token);
+                        thos.setMe(data.me);
                     }
                 })
                 .send(send);

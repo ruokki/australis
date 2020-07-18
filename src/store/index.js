@@ -6,6 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         token: null,
+        me: null,
         tooltip: {
             transition: "scale",
             class: "bg-primary text-body1"
@@ -74,7 +75,9 @@ export default new Vuex.Store({
         // Récupère la liste des états pour les emprunts
         getBorrowSate: (state) => (type) => state.borrowSate[type],
         // Récupération du token après connexion
-        getToken: (state) => state.token
+        getToken: (state) => state.token,
+        // Récupération de l'id user
+        getMe: (state) => state.me
     },
     mutations: {
         SET_CAT(state, payload) {
@@ -82,6 +85,9 @@ export default new Vuex.Store({
         },
         SET_TOKEN(state, payload) {
             state.token = payload;
+        },
+        SET_ME(state, payload) {
+            state.me = payload;
         }
     },
     actions: {
@@ -90,6 +96,9 @@ export default new Vuex.Store({
         },
         setToken({ commit }, token) {
             commit('SET_TOKEN', token);
+        },
+        setMe({ commit }, token) {
+            commit('SET_ME', token);
         },
     },
     modules: {}

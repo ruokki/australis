@@ -25,7 +25,8 @@ export default {
     computed: {
         ...mapGetters([
             'getCategory',
-            'getSubCategory'
+            'getSubCategory',
+            'getToken'
         ]),
         fullCategory: function() {
             if(this.main == 'mine') {
@@ -49,24 +50,24 @@ export default {
     },
     methods: {
         updateCategory: function() {
-            if(this.main == 'mine') {
-                this.icon = 'account_balance';
-                this.$api.url('category/mine')
-                    .success(this.setItem)
-                    .send();
-            }
-            else {
-                let category = this.getCategory(this.main);
-                this.mainName = category.category_name;
-                this.icon = category.category_icon;
-    
-                let sub = this.getSubCategory(this.main, this.sub);
-                this.subName = sub.category_name;
+            let category = this.getCategory(this.main);
+            this.mainName = category.category_name;
+            this.icon = category.category_icon;
 
-                this.$api.url('category/' + sub.category_id)
-                    .success(this.setItem)
-                    .send();
-
+            let sub = this.getSubCategory(this.main, this.sub);
+            this.subName = sub.category_name;
+            if(this.$store.getters.getToken !== null) {
+                if(this.main == 'mine') {
+                    this.icon = 'account_balance';
+                    this.$api.url('category/mine')
+                        .success(this.setItem)
+                        .send();
+                }
+                else {
+                    this.$api.url('category/' + sub.category_id)
+                        .success(this.setItem)
+                        .send();
+                }
             }
         },
         setItem: function(data){
@@ -80,6 +81,11 @@ export default {
         'sub': function() {
             this.updateCategory();
         },
+        'getToken': function(newVal, oldVal) {
+            if(oldVal === null) {
+                this.updateCategory();
+            }
+        }
     },
     mounted() {
         this.updateCategory();
