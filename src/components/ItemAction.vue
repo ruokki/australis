@@ -48,6 +48,15 @@
         </q-btn>
     </q-btn-group>
     <q-btn-group flat v-else>
+        <q-btn v-if="borrowable" icon="shopping_cart" @click.stop="borrowMe" >
+            <q-tooltip 
+                :transition-show="tooltipTransition"
+                :transition-hide="tooltipTransition"
+                :content-class="tooltipClass"
+            >
+                Emprunter l'item
+            </q-tooltip>
+        </q-btn>
         <q-btn icon="check_box_outline_blank" @click.stop="toReserve">
             <q-tooltip 
                 :transition-show="tooltipTransition"
@@ -55,15 +64,6 @@
                 :content-class="tooltipClass"
             >
                 Ajouter à ma réserve
-            </q-tooltip>
-        </q-btn>
-        <q-btn v-if="borrow" icon="shopping_cart" @click.stop="borrowMe" >
-            <q-tooltip 
-                :transition-show="tooltipTransition"
-                :transition-hide="tooltipTransition"
-                :content-class="tooltipClass"
-            >
-                Emprunter l'item
             </q-tooltip>
         </q-btn>
     </q-btn-group>
@@ -111,6 +111,15 @@ export default {
                 }
 
                 return false;
+            }
+        },
+        borrowable: function() {
+            let poss = this.otherPossession();
+            if(poss == false) {
+                return false;
+            }
+            else {
+                return true;
             }
         }
     },
@@ -196,6 +205,18 @@ export default {
          */
         indexPossession() {
             return this.item.possessors.findIndex(elem => elem.user_id == this.getMe);
+        },
+        /**
+         * Récupère les users auprès desquels on peut emprunter l'item
+         */
+        otherPossession() {
+            let poss = this.item.possessors.filter(elem => elem.user_id != this.getMe && elem.item_borrowable == 1);
+            if(poss.length > 0) {
+                return poss;
+            }
+            else {
+                return false;
+            }
         }
     }
 }
