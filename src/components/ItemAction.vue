@@ -8,7 +8,7 @@
             Emprunter l'item
         </q-tooltip>
     </q-icon>
-    <q-btn-group flat v-else-if="item.possessed">
+    <q-btn-group flat v-else-if="possessed">
         <q-btn icon="edit">
             <q-tooltip 
                 :transition-show="tooltipTransition"
@@ -94,8 +94,16 @@ export default {
     computed: {
         ...mapGetters([
             'tooltipTransition',
-            'tooltipClass'
+            'tooltipClass',
+            'getMe'
         ]),
+        possessed: function() {
+            let imIn = this.item.possessors.filter(elem => elem.user_id == this.getMe);
+            if(imIn.length > 0) {
+                return true;
+            }
+            return false;
+        }
     },
     methods: {
         // Définit si l'item est empruntable ou non
