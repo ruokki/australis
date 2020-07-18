@@ -1,6 +1,6 @@
 <template>
     <span v-if="onlyBorrow">
-        <q-icon v-if="!possessed" size="sm" class="q-px-sm cursor-pointer" name="shopping_cart" @click.stop="borrowMe" >
+        <q-icon v-if="!possessed" size="sm" class="q-px-sm cursor-pointer" name="shopping_cart" @click.stop="tryBorrow" >
             <q-tooltip 
                 :transition-show="tooltipTransition"
                 :transition-hide="tooltipTransition"
@@ -9,6 +9,21 @@
                 Emprunter l'item
             </q-tooltip>
         </q-icon>
+        <q-dialog v-model="dialogPossessor">
+                <q-card>
+                    <q-toolbar>
+                        <q-toolbar-title>Choix du possesseur</q-toolbar-title>
+                        <q-btn flat round dense icon="close" v-close-popup />
+                    </q-toolbar>
+                    <q-card-section>
+                        <p>&Agrave; qui souhaitez vous emprunter <span class="text-bold">{{ item.item_name }}</span> ?</p>
+                        <q-form @submit="askBorrow" class="column">
+                            <q-option-group v-model="borrowTo" :options="possessors" type="checkbox" />
+                            <q-btn label="Envoyer" color="primary" type="submit" full-width />
+                        </q-form>
+                    </q-card-section>
+                </q-card>
+        </q-dialog>
     </span>
     <q-btn-group flat v-else-if="possessed">
         <q-btn icon="edit">
@@ -77,7 +92,9 @@ export default {
     },
     data() {
         return {
-            borrow: false
+            borrow: false,
+            dialogPossessor: true,
+            borrowTo: []
         };
     },
     computed: {
@@ -92,6 +109,17 @@ export default {
                 return false;
             }
             return true;
+        },
+        possessors: function() {
+            let possessors = this.otherPossession();
+            let varReturn = [];
+            for(var i in possessors) {
+                varReturn.push({
+                    label: possessors[i].user_name,
+                    value: possessors[i].user_id
+                });
+            }
+            return varReturn;
         },
         allowBorrow: function() {
             let poss = this.myPossession();
@@ -164,15 +192,41 @@ export default {
         /**  
          * Envoi d'une demande de prêt
          */
-        borrowMe() {
-            /**
-             * @TODO Envoyer une requête pour faire un prêt
-             * id : this.item.id
-             * 
-             * S'il y a plusieurs possesseurs, afficher modal pour demander à qui faire la demande
-             * Si un seul, faire automatiquement la demande à ce user
-             * Si aucun, message d'alerte pour dire qu'aucun item n'est disponible
-             */
+        tryBorrow() {
+            let possessors = this.otherPossession();
+            if(possessors.length == 1) {
+                this.borrowTo = [possessors[0].user_id];
+                this.askBorrow();
+            }
+            else {
+                this.dialogPossessor = true;
+            }
+        },
+        /**
+         * Envoi des demandes d'emprunt
+         */
+        askBorrow() {
+            if(this.borrowTo.length > 0) {
+                let thos = this;
+                this.$api.url('borrow/ask')
+                    .success(() => {
+                        thos.dialogPossessor = false;
+                        thos.$q.notify({
+                            type: 'positive',
+                            message: "Demande enregistrée"
+                        });
+                    })
+                    .send({
+                        to: this.borrowTo,
+                        item: this.item.item_id
+                    });
+            }
+            else {
+                this.$q.notify({
+                    type: 'negative',
+                    message: "Veuillez choisir au moins un utilisateur"
+                });
+            }
         },
         /**
          * Redirection vers la modification d'un item
