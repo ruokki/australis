@@ -37,7 +37,7 @@
                 Prêts interdits
             </q-tooltip>
         </q-btn>
-        <q-btn icon="check_box" @click.stop="toReserve(false)">
+        <q-btn icon="check_box" @click.stop="toReserve">
             <q-tooltip 
                 :transition-show="tooltipTransition"
                 :transition-hide="tooltipTransition"
@@ -48,7 +48,7 @@
         </q-btn>
     </q-btn-group>
     <q-btn-group flat v-else>
-        <q-btn icon="check_box_outline_blank" @click.stop="toReserve(true)">
+        <q-btn icon="check_box_outline_blank" @click.stop="toReserve">
             <q-tooltip 
                 :transition-show="tooltipTransition"
                 :transition-hide="tooltipTransition"
@@ -84,7 +84,7 @@ export default {
     },
     data() {
         return {
-            
+            borrow: false
         };
     },
     computed: {
@@ -115,7 +115,9 @@ export default {
         }
     },
     methods: {
-        // Définit si l'item est empruntable ou non
+        /**  
+         * Définit si l'item est empruntable ou non
+         */
         setBorrow(borrowable) {
             let thos = this;            
             this.$api.url('item/borrow/allow')
@@ -133,20 +135,33 @@ export default {
                 .send({
                     item: this.item.item_id
                 });
-            },
-        toReserve(possessed) {
-            this.item.possessed = possessed;
-            this.$emit('update', this.item);
-            this.$q.notify({
-                type: 'positive',
-                message: possessed ? "Item ajouté à votre réserve" : "Item retiré de votre réserve"
-            });
+        },
+        /**
+         * Modification de la possession d'un item
+         */
+        toReserve() {
+            let poss = this.myPossession();
+            this.$api.url('item/poss/' + (poss === false ? 'add': 'remove'))
+                .success(data => {
+                    this.item.possessors = data;
+                })
+                .send({
+                    item: this.item.item_id
+                });
+            // this.item.possessed = possessed;
+            // this.$emit('update', this.item);
+            // this.$q.notify({
+            //     type: 'positive',
+            //     message: possessed ? "Item ajouté à votre réserve" : "Item retiré de votre réserve"
+            // });
             /**
              * @TODO Envoyer une requête pour retirer l'item de la reserve du user
              * id : this.item.id
              */
         },
-        // Envoi d'une demande de prêt
+        /**  
+         * Envoi d'une demande de prêt
+         */
         borrowMe() {
             /**
              * @TODO Envoyer une requête pour faire un prêt
@@ -157,6 +172,9 @@ export default {
              * Si aucun, message d'alerte pour dire qu'aucun item n'est disponible
              */
         },
+        /**
+         * Redirection vers la modification d'un item
+         */
         editItem() {
             // Redirection vers la page de modification d'un item
             router.push({ path: `/item/${this.item.id}`});
