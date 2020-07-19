@@ -97,7 +97,7 @@ export default {
       // Définition des tableaux
       lendCols: [
         { name: "item", label: "Item", field: "item_name"  },
-        { name: "lender", label: "Possesseur", field: "user_name"  },
+        { name: "lender", label: "Emprunteur", field: "user_name"  },
         { name: "duration", label: "Durée", field: "borrow_duration", format: (val) =>  val + " jour" + (val > 1 ? "s" : "" ) },
       ],
       borrowCols: [
