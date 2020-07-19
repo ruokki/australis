@@ -52,7 +52,7 @@
                         </q-td>
                         <q-td v-else-if="type == 'lender'" key="action" :props="props">
                             <div v-if="props.row.borrow_state == 'WA'">
-                                <q-icon name="done" size="sm" class="cursor-pointer">
+                                <q-icon name="done" size="sm" class="cursor-pointer" @click="answerBorrow(props.row.borrow_id, true)">
                                     <q-tooltip
                                         :transition-show="tooltipTransition"
                                         :transition-hide="tooltipTransition"
@@ -62,7 +62,7 @@
                                         Accepter la demande
                                     </q-tooltip>
                                 </q-icon>
-                                <q-icon name="close" size="sm" class="cursor-pointer">
+                                <q-icon name="close" size="sm" class="cursor-pointer" @click="deny.id = props.row.borrow_id; deny.show = true;">
                                     <q-tooltip
                                         :transition-show="tooltipTransition"
                                         :transition-hide="tooltipTransition"
@@ -81,7 +81,7 @@
                                         :content-class="tooltipClass"
                                         anchor="center left" self="center right"
                                     >
-                                        Confirmer prêt
+                                        Démarrer le prêt
                                     </q-tooltip>
                                 </q-icon>
                             </div>
@@ -138,7 +138,7 @@
                             <li>Cette demande apparait dans votre liste avec le statut "{{ getBorrowSate(this.type)["WA"] }}".</li>
                             <li>Vous choisissez si oui ou non, vous voulez prêter l'item.</li>
                             <li>
-                                Si vous décidez de le prêter, l'item passe en état "{{ getBorrowSate(this.type)["TB"] }}". A vous définir avec 
+                                Si vous décidez de le prêter, l'item passe en état "{{ getBorrowSate(this.type)["TB"] }}". A vous de définir avec 
                                 l'autre utilisateur où, quand et pour combien de temps vous allez lui transmettre l'item.
                             </li>
                             <li>
@@ -199,6 +199,21 @@
                     </q-card-actions>
                 </q-card>
             </q-dialog>
+             <q-dialog v-model="deny.show">
+                <q-card>
+                    <q-card-section>
+                        <q-form @submit="answerBorrow(deny.id, false)" class="column q-gutter-y-md">
+                            <p class="text-h4">Veuillez indiquer la raison du refus</p>
+                            <q-input
+                                v-model="deny.reason"
+                                filled
+                                type="textarea"
+                            />
+                            <q-btn full-width type="submit" label="OK" color="primary" v-close-popup />
+                        </q-form>
+                    </q-card-section>
+                </q-card>
+            </q-dialog>
         </div>
     </q-page>
 </template>
@@ -237,7 +252,7 @@ export default {
             }
         },
         /**
-         * Suppression d'une demande de prêt
+         * Suppression d'une demande pour emprunter l'item
          */
         deleteBorrow: function(idBorrow) {
             let thos = this;
@@ -252,12 +267,35 @@ export default {
                 .send({
                     id: idBorrow
                 });
+        },
+        /**
+         * Réponse à une demande de prêt en attente
+         */
+        answerBorrow: function(idBorrow, answer) {
+            let thos = this;
+            this.$api.url('lend/answer')
+                .success(data => {
+                    thos.datas = data;
+                    thos.$q.notify({
+                        type: "positive",
+                        message: "Demande " + (answer ? "acceptée" : "refusée")
+                    });
+                })
+                .send({
+                    id: idBorrow,
+                    answer: answer ? 1 : 0,
+                    reason: this.deny.reason
+                });
         }
     },
     data() {
         return {
             modalInfo: false,
-
+            deny: {
+                id: 0,
+                show: false,
+                reason: ""
+            },
             // Id du borrow pour la modal ouverte
             borrowId: 0,
 
