@@ -23,7 +23,7 @@
                                 name="close" 
                                 size="sm" 
                                 class="cursor-pointer"
-                                 @click="borrowId = props.row.borrow_id; deleteBorrow()"
+                                @click="deleteBorrow(props.row.borrow_id)"
                             >
                                 <q-tooltip
                                     :transition-show="tooltipTransition"
@@ -214,7 +214,8 @@ export default {
         ...mapGetters([
             'tooltipTransition',
             'tooltipClass',
-            'getBorrowSate'
+            'getBorrowSate',
+            'getToken'
         ]),
         getTitle: function() {
             return this.titles[this.type];
@@ -224,11 +225,33 @@ export default {
         },
     },
     methods: {
+        /**
+         * Mise à jour des dats du tableau
+         */
         updateDatas: function() {
-            let url = this.type === 'borrower' ? 'borrow/mine' : 'lend/mine';
-            this.$api.url(url)
-                .success(data => this.datas = data)
-                .send();
+            if(this.$store.getters.getToken !== null) {
+                let url = this.type === 'borrower' ? 'borrow/mine' : 'lend/mine';
+                this.$api.url(url)
+                    .success(data => this.datas = data)
+                    .send();
+            }
+        },
+        /**
+         * Suppression d'une demande de prêt
+         */
+        deleteBorrow: function(idBorrow) {
+            let thos = this;
+            this.$api.url('borrow/delete')
+                .success(data => {
+                    thos.datas = data
+                    thos.$q.notify({
+                        message: "Demande supprimée",
+                        type: "positive",
+                    })
+                })
+                .send({
+                    id: idBorrow
+                });
         }
     },
     data() {
@@ -266,6 +289,11 @@ export default {
     watch: {
         'type': function() {
             this.updateDatas();
+        },
+        'getToken': function(newVal, oldVal) {
+            if(oldVal === null) {
+                this.updateDatas();
+            }
         }
     }
 }

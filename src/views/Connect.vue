@@ -198,7 +198,7 @@ export default {
                         }
                         thos.$q.notify({
                             message: message.join(" "),
-                            color: "negative"
+                            type: "negative"
                         });
                     }
                     else {
