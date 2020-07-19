@@ -13,10 +13,10 @@
                     <q-tr :props="props">
                         <q-td key="item" :props="props">{{ props.row.item_name }}</q-td>
                         <q-td key="lender" :props="props">{{ props.row.user_name }}</q-td>
-                        <q-td key="date_ask" :props="props">{{ props.colsMap.date_ask.format() }}</q-td>
+                        <q-td key="date_ask" :props="props">{{ props.row.borrow_date_create }}</q-td>
                         <q-td key="state" :props="props">{{  props.colsMap.state.format(props.row.borrow_state) }}</q-td>
-                        <q-td key="date_begin" class="text-left" :props="props">{{ props.colsMap.date_begin.format() }}</q-td>
-                        <q-td key="date_end" :props="props">{{ props.colsMap.date_end.format() }}</q-td>
+                        <q-td key="date_begin" class="text-left" :props="props">{{ props.row.borrow_date_begin }}</q-td>
+                        <q-td key="date_end" :props="props">{{ props.row.borrow_date_end }}</q-td>
                         <q-td v-if="type == 'borrower'" key="action" :props="props">
                             <q-icon 
                                 v-if="props.row.borrow_state == 'WA' || props.row.borrow_state == 'TB'"
@@ -89,7 +89,7 @@
                                         buttons
                                         label-set="OK"
                                         label-cancel="Annuler"
-                                        @save="startBorrow(props.row.borrow_id)"
+                                        @save="startLend(props.row.borrow_id)"
                                     >
                                         <q-date
                                             v-model="dateEnd"
@@ -111,6 +111,24 @@
                                     >
                                         Modifier la date de fin
                                     </q-tooltip>
+                                    <q-popup-edit
+                                        v-model="dateEnd"
+                                        title="Date de fin"
+                                        buttons
+                                        label-set="OK"
+                                        label-cancel="Annuler"
+                                        @save="startLend(props.row.borrow_id, true)"
+                                        @show="actualEnd = props.row.borrow_date_end"
+                                    >
+                                        <q-date
+                                            v-model="dateEnd"
+                                            square
+                                            minimal
+                                            bordered
+                                            :options="limitNow"
+                                            :events="showActual"
+                                        />
+                                    </q-popup-edit>
                                 </q-icon>
                                 <q-icon name="pan_tool"  size="sm" class="cursor-pointer" >
                                     <q-tooltip
@@ -237,7 +255,6 @@
     </q-page>
 </template>
 <script>
-import moment from 'moment';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -318,20 +335,28 @@ export default {
         /**
          * Enregistrement de la date de prêt
          */
-        startBorrow: function(idBorrow) {
+        startLend: function(idBorrow, noStartUpdate) {
             let thos = this;
             this.$api.url('lend/start')
                 .success(data => {
                     thos.datas = data;
                     thos.$q.notify({
                         type: "positive",
-                        message: "Prêt démarré"
+                        message: noStartUpdate ? "Prêt rallongé" : "Prêt démarré"
                     });
                 })
                 .send({
                     id: idBorrow,
-                    end: this.dateEnd
+                    end: this.dateEnd,
+                    updateStart: noStartUpdate ? 0 : 1
                 })
+        },
+        /**
+         * 
+         */
+        showActual: function(date) {
+            console.log(date, this.actualEnd);
+            return false;
         }
     },
     data() {
@@ -350,6 +375,7 @@ export default {
             // Id du borrow pour la modal ouverte
             borrowId: 0,
             popupEdit: false,
+            actualEnd: "",
 
             titles: {
                 borrower: "Mes emprunts",
@@ -364,10 +390,10 @@ export default {
             cols:  [
                 { name: "item", label: "Item", field: "item_name"  },
                 { name: "lender", label: "Demandé à", field: "user_name"  },
-                { name: "date_ask", label: "Date de la demande", field: "borrow_date_create", format: (val) => moment(val).format('DD/MM/YYYY') },
+                { name: "date_ask", label: "Date de la demande", field: "borrow_date_create" },
                 { name: "state", label: "État de la demande", field: "borrow_state", format: (val) => this.getBorrowSate(this.type)[val], align: "left" },
-                { name: "date_begin", label: "Date de début", field: "borrow_date_start", format: (val) => moment(val).format('DD/MM/YYYY') },
-                { name: "date_end", label: "Date de fin", field: "borrow_date_end", format: (val) => moment(val).format('DD/MM/YYYY') },
+                { name: "date_begin", label: "Date de début", field: "borrow_date_start" },
+                { name: "date_end", label: "Date de fin", field: "borrow_date_end" },
                 { name: "action", label: "Actions", field: "borrow_id"},
             ],
             datas: []
