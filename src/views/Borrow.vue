@@ -118,7 +118,7 @@
                                         label-set="OK"
                                         label-cancel="Annuler"
                                         @save="startLend(props.row.borrow_id, true)"
-                                        @show="actualEnd = props.row.borrow_date_end"
+                                        @before-show="actualEnd = props.row.borrow_date_end;"
                                     >
                                         <q-date
                                             v-model="dateEnd"
@@ -255,6 +255,7 @@
     </q-page>
 </template>
 <script>
+import moment from 'moment';
 import { mapGetters } from 'vuex';
 
 export default {
@@ -355,8 +356,8 @@ export default {
          * 
          */
         showActual: function(date) {
-            console.log(date, this.actualEnd);
-            return false;
+            let tmp = moment(date);
+            return this.actualEnd == tmp.format('DD/MM/YYYY');
         }
     },
     data() {
