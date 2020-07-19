@@ -83,6 +83,22 @@
                                     >
                                         Démarrer le prêt
                                     </q-tooltip>
+                                    <q-popup-edit
+                                        v-model="dateEnd"
+                                        title="Date de fin"
+                                        buttons
+                                        label-set="OK"
+                                        label-cancel="Annuler"
+                                        @save="startBorrow(props.row.borrow_id)"
+                                    >
+                                        <q-date
+                                            v-model="dateEnd"
+                                            square
+                                            minimal
+                                            bordered
+                                            :options="limitNow"
+                                        />
+                                    </q-popup-edit>
                                 </q-icon>
                             </div>
                             <div v-else-if="props.row.borrow_state == 'BO'">
@@ -199,6 +215,8 @@
                     </q-card-actions>
                 </q-card>
             </q-dialog>
+
+            <!-- Modal pour demander la raison du refus du prêt -->
              <q-dialog v-model="deny.show">
                 <q-card>
                     <q-card-section>
@@ -214,6 +232,7 @@
                     </q-card-section>
                 </q-card>
             </q-dialog>
+
         </div>
     </q-page>
 </template>
@@ -240,6 +259,15 @@ export default {
         },
     },
     methods: {
+        /**
+         * Limite le datepicker à demain et après
+         */
+        limitNow: function(date) {
+            let now = new Date();
+            let tmp = new Date(date);
+            return tmp > now;
+
+        },
         /**
          * Mise à jour des dats du tableau
          */
@@ -286,18 +314,42 @@ export default {
                     answer: answer ? 1 : 0,
                     reason: this.deny.reason
                 });
+        },
+        /**
+         * Enregistrement de la date de prêt
+         */
+        startBorrow: function(idBorrow) {
+            let thos = this;
+            this.$api.url('lend/start')
+                .success(data => {
+                    thos.datas = data;
+                    thos.$q.notify({
+                        type: "positive",
+                        message: "Prêt démarré"
+                    });
+                })
+                .send({
+                    id: idBorrow,
+                    end: this.dateEnd
+                })
         }
     },
     data() {
         return {
             modalInfo: false,
+            /**
+             * Gestion de la modal "Refuser la demande"
+             */
             deny: {
                 id: 0,
                 show: false,
                 reason: ""
             },
+            // Date de fin du prêt
+            dateEnd: null,
             // Id du borrow pour la modal ouverte
             borrowId: 0,
+            popupEdit: false,
 
             titles: {
                 borrower: "Mes emprunts",
