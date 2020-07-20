@@ -35,7 +35,7 @@
                                 </q-tooltip>
                             </q-icon>
                             <q-icon 
-                                v-else-if="props.row.borrow_state == 'BO'"
+                                v-else-if="props.row.borrow_state == 'BO' || props.row.borrow_state == 'AR'"
                                 name="autorenew" 
                                 size="sm" 
                                 class="cursor-pointer"
@@ -48,6 +48,24 @@
                                 >
                                     Demander une rallonge
                                 </q-tooltip>
+                                <q-popup-edit
+                                        v-model="dateEnd"
+                                        title="Date souhaitée"
+                                        buttons
+                                        label-set="OK"
+                                        label-cancel="Annuler"
+                                        @save="askExtension(props.row.borrow_id)"
+                                        @before-show="actualEnd = props.row.borrow_date_end;"
+                                    >
+                                        <q-date
+                                            v-model="dateEnd"
+                                            square
+                                            minimal
+                                            bordered
+                                            :options="limitNow"
+                                            :events="showActual"
+                                        />
+                                    </q-popup-edit>
                             </q-icon>
                         </q-td>
                         <q-td v-else-if="type == 'lender'" key="action" :props="props">
@@ -350,7 +368,7 @@ export default {
                     id: idBorrow,
                     end: this.dateEnd,
                     updateStart: noStartUpdate ? 0 : 1
-                })
+                });
         },
         /**
          * 
@@ -374,6 +392,25 @@ export default {
                 })
                 .send({
                     id: idBorrow
+                });
+        },
+        /**
+         * Demande d'extension du prêt
+         */
+        askExtension(idBorrow) {
+            let thos = this;
+            this.$api.url('borrow/extend')
+                .success(data => {
+                    thos.datas = data;
+                    thos.$q.notify({
+                        type: "positive",
+                        message: "Demande enregistrée"
+                    });
+                })
+                .send({
+                    cmd: 'ask',
+                    id: idBorrow,
+                    ask: this.dateEnd
                 });
         }
     },
