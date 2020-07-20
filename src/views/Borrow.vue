@@ -130,7 +130,7 @@
                                         />
                                     </q-popup-edit>
                                 </q-icon>
-                                <q-icon name="pan_tool"  size="sm" class="cursor-pointer" >
+                                <q-icon name="pan_tool"  size="sm" class="cursor-pointer" @click="endBorrow(props.row.borrow_id)" >
                                     <q-tooltip
                                         :transition-show="tooltipTransition"
                                         :transition-hide="tooltipTransition"
@@ -358,6 +358,23 @@ export default {
         showActual: function(date) {
             let tmp = moment(date);
             return this.actualEnd == tmp.format('DD/MM/YYYY');
+        },
+        /**
+         * Termine un prêt
+         */
+        endBorrow: function(idBorrow) {
+            let thos = this;
+            this.$api.url('lend/end')
+                .success(data => {
+                    thos.datas = data;
+                    thos.$q.notify({
+                        type: "positive",
+                        message: "Prêt terminé"
+                    });
+                })
+                .send({
+                    id: idBorrow
+                });
         }
     },
     data() {
@@ -380,7 +397,7 @@ export default {
 
             titles: {
                 borrower: "Mes emprunts",
-                lender: "Mes demandes de prêt",
+                lender: "Demandes de prêts",
                 oldLent: "Historique des prêts",
             },
             help: {
