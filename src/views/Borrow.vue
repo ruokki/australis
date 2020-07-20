@@ -173,6 +173,17 @@
                                     >
                                         Voir la rallonge
                                     </q-tooltip>
+                                    <q-popup-edit
+                                        v-model="renewDate"
+                                        title="Rallonge demandée"
+                                        buttons
+                                        label-set="Accepter"
+                                        label-cancel="Refuser"
+                                        @save="manageExtension(props.row.borrow_id, true)"
+                                        @cancel="manageExtension(props.row.borrow_id, false)"
+                                    >
+                                        <div class="text-center">{{ props.row.borrow_renew_ask_date }}</div>
+                                    </q-popup-edit>
                                 </q-icon>
                             </div>
                         </q-td>
@@ -427,6 +438,25 @@ export default {
                     cmd: 'ask',
                     id: idBorrow,
                     ask: this.dateEnd
+                });
+        },
+        /**
+         * Gestion de la réponse à une demande d'extension
+         */
+        manageExtension: function(idBorrow, answer) {
+            let thos = this;
+            this.$api.url('lend/extend')
+                .success(data => {
+                    thos.datas = data;
+                    thos.$q.notify({
+                        type: "positive",
+                        message: "Demande " + (answer ? "acceptée" : "refusée")
+                    });
+                })
+                .send({
+                    cmd: "answer",
+                    id: idBorrow,
+                    answer: answer ? 1 : 0
                 });
         }
     },
