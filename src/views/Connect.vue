@@ -204,9 +204,22 @@ export default {
                     else {
                         thos.setToken(data.token);
                         thos.setMe(data.me);
+                        thos.resetAll();
                     }
                 })
                 .send(send);
+        },
+        resetAll() {
+            this.user = "";
+            this.pwd = "";
+            this.newUser = {
+                name: "",
+                firstname: "",
+                lastname: "",
+                pwd: "",
+                email: ""
+            };
+            this.step = "signin";
         }
     },
     watch: {

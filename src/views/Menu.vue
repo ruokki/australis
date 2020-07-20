@@ -7,7 +7,7 @@
           <q-btn-group spread flat>
             <q-btn class="text-center" size="lg" icon="home" to="/" />
             <q-btn class="text-center" size="lg" icon="search" to="/" />
-            <q-btn class="text-center" size="lg" icon="exit_to_app" to="/" />
+            <q-btn class="text-center" size="lg" icon="exit_to_app" @click="logout" />
           </q-btn-group>
       </div>
       <q-list separator>
@@ -81,6 +81,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
+
 export default {
   name: "Menu",
   computed: {
@@ -92,6 +94,17 @@ export default {
     return {
       
     };
+  },
+  methods: {
+    ...mapActions([
+        'setToken',
+        'setMe'
+    ]),
+    logout: function() {
+      this.$api.url('user/logout').send();
+      this.setToken(null);
+      this.setMe(null);
+    }
   }
 };
 </script>
