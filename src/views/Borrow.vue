@@ -14,7 +14,10 @@
                         <q-td key="item" :props="props">{{ props.row.item_name }}</q-td>
                         <q-td key="lender" :props="props">{{ props.row.user_name }}</q-td>
                         <q-td key="date_ask" :props="props">{{ props.row.borrow_date_create }}</q-td>
-                        <q-td key="state" :props="props">{{  props.colsMap.state.format(props.row.borrow_state) }}</q-td>
+                        <q-td key="state" :props="props">
+                            {{  props.colsMap.state.format(props.row.borrow_state) }} 
+                            <span v-if="props.row.borrow_state == 'AR' && type == 'borrower'">({{ props.row.borrow_renew_ask_date }})</span>
+                        </q-td>
                         <q-td key="date_begin" class="text-left" :props="props">{{ props.row.borrow_date_begin }}</q-td>
                         <q-td key="date_end" :props="props">{{ props.row.borrow_date_end }}</q-td>
                         <q-td v-if="type == 'borrower'" key="action" :props="props">
@@ -55,7 +58,7 @@
                                         label-set="OK"
                                         label-cancel="Annuler"
                                         @save="askExtension(props.row.borrow_id)"
-                                        @before-show="actualEnd = props.row.borrow_date_end;"
+                                        @before-show="actualEnd = props.row.borrow_date_end; renewDate = props.row.borrow_renew_ask_date;"
                                     >
                                         <q-date
                                             v-model="dateEnd"
@@ -64,6 +67,7 @@
                                             bordered
                                             :options="limitNow"
                                             :events="showActual"
+                                            :event-color="colorActual"
                                         />
                                     </q-popup-edit>
                             </q-icon>
@@ -371,11 +375,23 @@ export default {
                 });
         },
         /**
-         * 
+         * Indique la date choisi pour la fin de l'emprunt
          */
         showActual: function(date) {
             let tmp = moment(date);
-            return this.actualEnd == tmp.format('DD/MM/YYYY');
+            return this.actualEnd == tmp.format('DD/MM/YYYY') || this.renewDate == tmp.format('DD/MM/YYYY');
+        },
+        /**
+         * Gestion de la couleur des events
+         */
+        colorActual: function(date) {
+            let tmp = moment(date);
+            if(this.renewDate == tmp.format('DD/MM/YYYY')) {
+                return "deep-orange";
+            }
+            else {
+                return "green";
+            }
         },
         /**
          * Termine un prêt
@@ -431,6 +447,7 @@ export default {
             borrowId: 0,
             popupEdit: false,
             actualEnd: "",
+            renewDate: "",
 
             titles: {
                 borrower: "Mes emprunts",
