@@ -176,13 +176,13 @@
                                     <q-popup-edit
                                         v-model="renewDate"
                                         title="Rallonge demandée"
-                                        buttons
-                                        label-set="Accepter"
-                                        label-cancel="Refuser"
-                                        @save="manageExtension(props.row.borrow_id, true)"
-                                        @cancel="manageExtension(props.row.borrow_id, false)"
+                                        @before-show="renewDate = props.row.borrow_renew_ask_date;"
                                     >
-                                        <div class="text-center">{{ props.row.borrow_renew_ask_date }}</div>
+                                        <q-input v-model="renewDate" dense readonly borderless />
+                                        <q-btn-group flat>
+                                            <q-btn label="Refuser" color="primary" flat @click="manageExtension(props.row.borrow_id, false)" v-close-popup />
+                                            <q-btn label="Accepter" color="primary" flat @click="manageExtension(props.row.borrow_id, true)" v-close-popup />
+                                        </q-btn-group>
                                     </q-popup-edit>
                                 </q-icon>
                             </div>
@@ -452,6 +452,7 @@ export default {
                         type: "positive",
                         message: "Demande " + (answer ? "acceptée" : "refusée")
                     });
+                    thos.renewDate = "";
                 })
                 .send({
                     cmd: "answer",
