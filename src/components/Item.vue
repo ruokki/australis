@@ -59,7 +59,7 @@ export default {
     },
     methods: {
         seeItem() {
-            router.push({ path: `/item/${this.item.id}`});
+            router.push({ path: `/item/${this.item.item_id}`});
         },
         updateItem(newItem) {
             this.item = newItem;
