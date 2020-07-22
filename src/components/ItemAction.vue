@@ -245,6 +245,8 @@ export default {
          * Récupère les infos de possession pour le user courant
          */
         myPossession() {
+            if(this.item.possessors == undefined) return false;
+            
             let poss = this.item.possessors.filter(elem => elem.user_id == this.getMe);
             if(poss.length > 0) {
                 return poss[0];
@@ -257,12 +259,16 @@ export default {
          * Récupère l'index des infos de possession pour le user courant
          */
         indexPossession() {
+            if(this.item.possessors == undefined) return false;
+
             return this.item.possessors.findIndex(elem => elem.user_id == this.getMe);
         },
         /**
          * Récupère les users auprès desquels on peut emprunter l'item
          */
         otherPossession() {
+            if(this.item.possessors == undefined) return false;
+
             let poss = this.item.possessors.filter(elem => elem.user_id != this.getMe && elem.item_borrowable == 1);
             if(poss.length > 0) {
                 return poss;

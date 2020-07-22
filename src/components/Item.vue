@@ -5,7 +5,7 @@
         @mouseleave="front = false"
     >
         <div class="background">
-            <q-img :src="item.full_path_img" :ratio="1" >
+            <q-img :src="item.item_img" :ratio="1" >
                  <template v-slot:error>
                     <div class="absolute-full flex flex-center bg-negative text-white">
                     Erreur lors du chargement de l'image

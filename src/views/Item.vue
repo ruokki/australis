@@ -42,7 +42,8 @@ export default {
     computed: {
         ...mapGetters([
             'getCategory',
-            'getSubCategory'
+            'getSubCategory',
+            'getToken'
         ]),
         itemCategory() {
             let category = this.getCategory(this.item.main_category);
@@ -55,31 +56,36 @@ export default {
         return {
             infoHeight: 0,
             similarHeight: 0,
-            item: {
-                item_name: "Item de test",
-                item_img: "https://picsum.photos/1200/500",
-                main_category: 2,
-                sub_category: 22,
-                possessed: false,
-                item_creator: "Moi",
-                item_editor: "Edition du pingouin",
-                item_release: 2014,
-                item_type: "PS4",
-                item_descript: "Naofumi Iwatani a été invoqué dans un monde parallèle avec trois autres personnes originaires de Japons parallèles pour devenir les héros de ce monde. Chacun des héros était équipé de son propre équipement légendaire lors de leur invocation. Naofumi a reçu le « Bouclier légendaire », le seul équipement défensif, tandis que les autres ont reçu des armes offensives. Naofumi Iwatani a été invoqué dans un monde parallèle avec trois autres personnes originaires de Japons parallèles pour devenir les héros de ce monde. Chacun des héros était équipé de son propre équipement légendaire lors de leur invocation. Naofumi a reçu le « Bouclier légendaire », le seul équipement défensif, tandis que les autres ont reçu des armes offensives. Naofumi Iwatani a été invoqué dans un monde parallèle avec trois autres personnes originaires de Japons parallèles pour devenir les héros de ce monde. Chacun des héros était équipé de son propre équipement légendaire lors de leur invocation. Naofumi a reçu le « Bouclier légendaire », le seul équipement défensif, tandis que les autres ont reçu des armes offensives. Naofumi Iwatani a été invoqué dans un monde parallèle avec trois autres personnes originaires de Japons parallèles pour devenir les héros de ce monde. Chacun des héros était équipé de son propre équipement légendaire lors de leur invocation. Naofumi a reçu le « Bouclier légendaire », le seul équipement défensif, tandis que les autres ont reçu des armes offensives. Naofumi Iwatani a été invoqué dans un monde parallèle avec trois autres personnes originaires de Japons parallèles pour devenir les héros de ce monde. Chacun des héros était équipé de son propre équipement légendaire lors de leur invocation. Naofumi a reçu le « Bouclier légendaire », le seul équipement défensif, tandis que les autres ont reçu des armes offensives.",
-                item_idx_collection: 2,
-                collection_length: 8
-            },
+            item: {},
         }
     },
     methods: {
         updateItem(newItem) {
+            console.log(newItem);
             this.item = newItem;
+        },
+        getItem() {
+            if(this.$store.getters.getToken !== null) {
+                this.$api.url('item/get')
+                    .success(data => this.item = data)
+                    .send({
+                        id: this.id
+                    });
+            }
+        }
+    },
+    watch: {
+        'getToken': function(newVal, oldVal) {
+            if(oldVal === null) {
+                this.getItem();
+            }
         }
     },
     mounted() {
         /**
          * @TODO Récupérer les infos de l'item
          */
+        this.getItem();
         let availHeight = document.getElementById("page").offsetHeight - document.querySelector("#page > .q-toolbar").offsetHeight;
         this.similarHeight = availHeight;
     }

@@ -17,8 +17,8 @@
                 <q-item-section>{{ item.item_idx_collection }} / {{ item.collection_length }}</q-item-section>
             </q-item>
             <q-item  v-for="(one, key) in fields" :key="key">
-                <q-item-section v-if="item['item_' + one.field_name]" class="text-right">{{ one.field_label }}</q-item-section>
-                <q-item-section v-if="item['item_' + one.field_name]">{{ item['item_' + one.field_name]}}</q-item-section>
+                <q-item-section v-if="item[one.field_name]" class="text-right">{{ one.field_label }}</q-item-section>
+                <q-item-section v-if="item[one.field_name]">{{ item[one.field_name]}}</q-item-section>
             </q-item>
         </q-list>
     </div>
@@ -154,17 +154,25 @@ export default {
                 }
             }
             else {
-                fields = fields.concat(this.getSubCategory(this.item.main_category, this.item.sub_category).fields);
+                if(this.item.category_id !== undefined) {
+                    fields = fields.concat(this.getSubCategory(this.item.category_id, this.item.subcategory_id).fields);
+
+                    let imgIdx = fields.findIndex(elem => elem.field_name == 'item_img');
+                    fields.splice(imgIdx, 1);
+                }
             }
 
             return fields;
         },
         // Récupération du nom complet de la catégorie
         fullCategory: function() {
-            let category = this.getCategory(this.item.main_category);
-            let sub = this.getSubCategory(this.item.main_category, this.item.sub_category);
-
-            return category.category_name + " - " + sub.category_name;
+            if(this.item.category_id !== undefined) {
+                let category = this.getCategory(this.item.category_id);
+                let sub = this.getSubCategory(this.item.category_id, this.item.subcategory_id);
+    
+                return category.category_name + " - " + sub.category_name;
+            }
+            return "";
         }
     },
     props: {
