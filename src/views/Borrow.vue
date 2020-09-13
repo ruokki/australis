@@ -34,7 +34,7 @@
                                     :content-class="tooltipClass"
                                     anchor="center left" self="center right"
                                 >
-                                    Supprimer ma demande
+                                    {{ $getTexts('delete', page) }}
                                 </q-tooltip>
                             </q-icon>
                             <q-icon 
@@ -49,7 +49,7 @@
                                     :content-class="tooltipClass"
                                     anchor="center left" self="center right"
                                 >
-                                    Demander une rallonge
+                                    {{ $getTexts('moreTime', page) }}
                                 </q-tooltip>
                                 <q-popup-edit
                                         v-model="dateEnd"
@@ -81,7 +81,7 @@
                                         :content-class="tooltipClass"
                                         anchor="center left" self="center right"
                                     >
-                                        Accepter la demande
+                                        {{ $getTexts('accept', page) }}
                                     </q-tooltip>
                                 </q-icon>
                                 <q-icon name="close" size="sm" class="cursor-pointer" @click="deny.id = props.row.borrow_id; deny.show = true;">
@@ -91,7 +91,7 @@
                                         :content-class="tooltipClass"
                                         anchor="center left" self="center right"
                                     >
-                                        Refuser la demande
+                                        {{ $getTexts('deny', page) }}
                                     </q-tooltip>
                                 </q-icon>
                             </div>
@@ -103,7 +103,7 @@
                                         :content-class="tooltipClass"
                                         anchor="center left" self="center right"
                                     >
-                                        Démarrer le prêt
+                                        {{ $getTexts('start', page) }}
                                     </q-tooltip>
                                     <q-popup-edit
                                         v-model="dateEnd"
@@ -159,7 +159,7 @@
                                         :content-class="tooltipClass"
                                         anchor="center left" self="center right"
                                     >
-                                        Terminer le prêt
+                                        {{ $getTexts('end', page) }}
                                     </q-tooltip>
                                 </q-icon>
                             </div>
@@ -171,7 +171,7 @@
                                         :content-class="tooltipClass"
                                         anchor="center left" self="center right"
                                     >
-                                        Voir la rallonge
+                                        {{ $getTexts('seeMoreTime', page) }}
                                     </q-tooltip>
                                     <q-popup-edit
                                         v-model="renewDate"
@@ -471,6 +471,7 @@ export default {
     },
     data() {
         return {
+            page: "Borrow",
             modalInfo: false,
             /**
              * Gestion de la modal "Refuser la demande"

@@ -16,7 +16,7 @@
         </div>
         <div id="similar" class="column q-px-sm" :style="'max-height:' + similarHeight + 'px;'" >
             <div class="col-1">
-                <div class="text-h6">Items similaires</div>
+                <div class="text-h6">{{ $getTexts('similar', 'Item') }}</div>
             </div>
             <div class="col row">
                 <ItemList />

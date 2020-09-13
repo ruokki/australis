@@ -5,7 +5,7 @@
         </q-toolbar>
         <div class="q-pa-md">
             <q-expansion-item 
-                label="Catégorie" 
+                :label="$getTexts('category', 'All')" 
                 :caption="categoryName"
                 switch-toggle-side 
                 :icon="categoryIcon" 
@@ -20,7 +20,7 @@
             </q-expansion-item>
             <q-separator />
             <q-expansion-item 
-                label="Sous-catégorie" 
+                :label="$getTexts('subCategory', 'All')" 
                 :caption="subCategoryName"
                 switch-toggle-side 
                 v-model="seeSub"
@@ -42,7 +42,7 @@
             >
                 <div v-show="alertOneShot" class="row justify-between items-center text-white bg-warning q-pa-xs">
                     <q-icon name="warning" size="sm" />
-                    <div>Attention ! L'item doit être un one-shot.</div>
+                    <div>Attention ! {{ $getTexts('oneShot', page) }}</div>
                     <q-icon name="warning" size="sm" />
                 </div>
                 <q-form @submit="saveItem">
@@ -57,8 +57,8 @@
                     <q-input v-if="type == 'collection'" 
                         type="number" 
                         v-model="newItem.collection_length"
-                        label="Nombre de tome"
-                        hint="Pour gérer les tomes possédés, cliquer sur l'icône" 
+                        :label="$getTexts('nbItems', page)"
+                        :hint="$getTexts('hintNbItems', page)" 
                     >
                         <template v-slot:append>
                             <q-icon name="list" class="cursor-pointer" @click="dialogPossessed = true" />
@@ -72,7 +72,7 @@
                  <q-dialog v-model="dialogPossessed" position="right">
                     <q-card>
                         <q-toolbar>
-                            <q-toolbar-title>Liste des tomes possédés</q-toolbar-title>
+                            <q-toolbar-title>{{ $getTexts('listPossessed', page) }}</q-toolbar-title>
                             <q-btn flat round dense icon="close" v-close-popup />
                         </q-toolbar>
                         <q-card-section>
@@ -211,7 +211,7 @@ export default {
         alertOneShot: function() {
             if(this.newItem.category_id > 0) {
                 let cat = this.getCategory(this.newItem.category_id);
-                if(cat.category_allow_collection === 1 && this.type == 'item') {
+                if(parseInt(cat.category_allow_collection) === 1 && this.type == 'item') {
                     return true;
                 }
             }
@@ -228,6 +228,7 @@ export default {
     },
     data() {
         return {
+            page: "Create",
             newItem: {
                 category_id: 0,
                 subcategory_id: 0,

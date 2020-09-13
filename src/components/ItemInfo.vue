@@ -9,7 +9,7 @@
                 </q-item-section>
             </q-item>
             <q-item>
-                <q-item-section class="text-right">Catégorie</q-item-section>
+                <q-item-section class="text-right">{{ $getTexts('category', 'All') }}</q-item-section>
                 <q-item-section>{{ fullCategory }}</q-item-section>
             </q-item>
             <q-item  v-if="item.item_idx_collection > 0">

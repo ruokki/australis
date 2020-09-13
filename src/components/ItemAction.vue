@@ -6,17 +6,17 @@
                 :transition-hide="tooltipTransition"
                 :content-class="tooltipClass"
             >
-                Emprunter l'item
+                {{ $getTexts('borrow') }}
             </q-tooltip>
         </q-icon>
         <q-dialog v-model="dialogPossessor" @hide="resetBorrowTo">
                 <q-card>
                     <q-toolbar>
-                        <q-toolbar-title>Choix du possesseur</q-toolbar-title>
+                        <q-toolbar-title>{{ $getTexts('dialogPossessor').title }}</q-toolbar-title>
                         <q-btn flat round dense icon="close" v-close-popup />
                     </q-toolbar>
                     <q-card-section>
-                        <p>&Agrave; qui souhaitez vous emprunter <span class="text-bold">{{ item.item_name }}</span> ?</p>
+                        <p>{{ $getTexts('dialogPossessor').question }} <span class="text-bold">{{ item.item_name }}</span> ?</p>
                         <q-form @submit="askBorrow" class="column">
                             <q-option-group v-model="borrowTo" :options="possessors" type="checkbox" />
                             <q-btn label="Envoyer" color="primary" type="submit" full-width />
@@ -33,7 +33,7 @@
                 :content-class="tooltipClass"
                 @click.stop="editItem"
             >
-                Modifier l'item
+                {{ $getTexts('editItem') }}
             </q-tooltip>
         </q-btn>
         <q-btn v-if="allowBorrow" icon="lock_open" @click.stop="setBorrow(true)" >
@@ -42,7 +42,7 @@
                 :transition-hide="tooltipTransition"
                 :content-class="tooltipClass"
             >
-                Prêts autorisés
+                {{ $getTexts('lentAllow') }}
             </q-tooltip>
         </q-btn>
         <q-btn v-else icon="lock" @click.stop="setBorrow(false)">
@@ -51,7 +51,8 @@
                 :transition-hide="tooltipTransition"
                 :content-class="tooltipClass"
             >
-                Prêts interdits
+                {{ $getTexts('lentForbidden') }}
+                
             </q-tooltip>
         </q-btn>
         <q-btn icon="check_box" @click.stop="toReserve">
@@ -60,7 +61,7 @@
                 :transition-hide="tooltipTransition"
                 :content-class="tooltipClass"
             >
-                Retirer de ma réserve
+                {{ $getTexts('removeItemToUser') }}
             </q-tooltip>
         </q-btn>
     </q-btn-group>
@@ -71,7 +72,7 @@
                 :transition-hide="tooltipTransition"
                 :content-class="tooltipClass"
             >
-                Ajouter à ma réserve
+                {{ $getTexts('removeItemToUser') }}
             </q-tooltip>
         </q-btn>
     </q-btn-group>
@@ -158,7 +159,7 @@ export default {
                         thos.$emit('update', this.item);
                         thos.$q.notify({
                             type: 'positive',
-                            message: borrowable ? "L'item peut à nouveau être emprunté" : "L'item ne peux plus être emprunté"
+                            message: borrowable ? this.$getTexts('notify').borrowable : this.$getTexts('notify').noBorrowable
                         });
                     }
                 })
@@ -174,20 +175,15 @@ export default {
             this.$api.url('item/poss/' + (poss === false ? 'add': 'remove'))
                 .success(data => {
                     this.item.possessors = data;
+                    let possessed = data.findIndex(elem => elem.user_id == this.getMe) === -1 ? false: true;
+                    this.$q.notify({
+                        type: 'positive',
+                        message: possessed ? this.$getTexts('notify').itemPossessed : this.$getTexts('notify').itemNotPossessed
+                    });
                 })
                 .send({
                     item: this.item.item_id
                 });
-            // this.item.possessed = possessed;
-            // this.$emit('update', this.item);
-            // this.$q.notify({
-            //     type: 'positive',
-            //     message: possessed ? "Item ajouté à votre réserve" : "Item retiré de votre réserve"
-            // });
-            /**
-             * @TODO Envoyer une requête pour retirer l'item de la reserve du user
-             * id : this.item.id
-             */
         },
         /**  
          * Envoi d'une demande de prêt
@@ -213,7 +209,7 @@ export default {
                         thos.dialogPossessor = false;
                         thos.$q.notify({
                             type: 'positive',
-                            message: "Demande enregistrée"
+                            message: this.$getTexts('notify').borrowASked
                         });
                     })
                     .send({
@@ -224,7 +220,7 @@ export default {
             else {
                 this.$q.notify({
                     type: 'negative',
-                    message: "Veuillez choisir au moins un utilisateur"
+                    message: this.$getTexts('notify').noUserSelected
                 });
             }
         },

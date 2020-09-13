@@ -2,11 +2,11 @@
   <q-page class="q-pa-md column">
     <!-- Première ligne : Chart et Répartition de la médiathèque -->
     <div class="row q-gutter-x-md">
-      <div class="col">Mon joli chart</div>
+      <div class="col">{{ $getTexts('chart', page) }}</div>
       <div class="col">
           <q-card class="bg-primary">
             <q-card-section>
-              <div class="text-h6 text-center">Ma médiathèque</div>
+              <div class="text-h6 text-center">{{ $getTexts('allItems', page) }}</div>
             </q-card-section>
             <q-tabs
               v-model="tab"
@@ -39,7 +39,7 @@
     <div class="row q-gutter-x-md">
       <div class="col">
         <q-table
-          title="Demandes en attente"
+          :title="$getTexts('waitingBorrow', page)"
           dense
           :data="lends"
           :columns="lendCols"
@@ -50,7 +50,7 @@
       </div>
       <div class="col">
         <q-table
-          title="Emprunts en cours"
+          :title="$getTexts('runningLent', page)"
           dense
           :data="borrows"
           :columns="borrowCols"
@@ -91,6 +91,7 @@ export default {
   },
   data() {
     return {
+      page: "Home",
       tab: "",
       itemsBySub: {},
 
