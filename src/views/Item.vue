@@ -1,7 +1,7 @@
 <template>
     <q-page id="page">
         <q-toolbar class="bg-primary text-white">
-            <q-toolbar-title class="text-h4">
+            <q-toolbar-title>
                 {{ item.item_name }}
             </q-toolbar-title>
             <ItemAction :item="item" @update="updateItem" :button="true" :borrow="true" />

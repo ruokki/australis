@@ -4,10 +4,13 @@ import './registerServiceWorker'
 import router from './router'
 import './quasar'
 import './ajax'
+import texts from './texts'
 import store from './store'
 
 
 Vue.config.productionTip = false
+
+Vue.use(texts);
 
 new Vue({
   router,

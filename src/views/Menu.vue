@@ -1,8 +1,11 @@
 <template>
     <q-drawer bordered show-if-above content-class="bg-grey-2">
-      <div class="row justify-center">
-        <img id="logo" src="../assets/logo.png" />
-      </div>
+      <q-banner class="bg-grey-2">
+        <template v-slot:avatar>
+          <img src="https://cdn.quasar.dev/logo/svg/quasar-logo.svg" height="40px">
+        </template>
+        <div class="text-h6">Penguin Possess</div>
+      </q-banner>
       <div>
           <q-btn-group spread flat>
             <q-btn class="text-center" size="lg" icon="home" to="/" />
@@ -12,21 +15,21 @@
       </div>
       <q-list separator>
           <q-item>
-            <h5>Mon compte</h5>
+            <h5>{{ $getTexts('account') }}</h5>
           </q-item>
           <q-expansion-item 
               icon="storage"
-              label="Ma réserve"
+              :label="$getTexts('userItems').main"
               group="account">
               <q-list separator>
                 <q-item to="/category/mine" clickable v-ripple>
-                  <q-item-section>Mes items</q-item-section>
+                  <q-item-section>{{ $getTexts('userItems').list }}</q-item-section>
                 </q-item>
                 <q-item to="/create/item" clickable v-ripple>
-                  <q-item-section>Créer un item</q-item-section>
+                  <q-item-section>{{ $getTexts('userItems').createOne }}</q-item-section>
                 </q-item>
                 <q-item to="/create/collection" clickable v-ripple>
-                  <q-item-section>Créer une collection</q-item-section>
+                  <q-item-section>{{ $getTexts('userItems').createMulti }}</q-item-section>
                 </q-item>
               </q-list>
           </q-expansion-item>
@@ -34,24 +37,24 @@
             <q-item-section avatar>
               <q-icon name="favorite" />
             </q-item-section>
-            <q-item-section>Ma wishlist</q-item-section>
+            <q-item-section>{{ $getTexts('desiredItems') }}</q-item-section>
           </q-item>
           <q-item to="/borrow/borrower" clickable>
             <q-item-section avatar>
               <q-icon name="pan_tool" />
             </q-item-section>
-            <q-item-section>Mes emprunts</q-item-section>
+            <q-item-section>{{ $getTexts('borrow') }}</q-item-section>
           </q-item>
           <q-expansion-item 
               icon="work"
-              label="Prêts"
+              :label="$getTexts('lent').main"
               group="account">
               <q-list separator>
                 <q-item to="/borrow/lender" clickable v-ripple>
-                  <q-item-section>Prêts en cours</q-item-section>
+                  <q-item-section>{{ $getTexts('lent').running }}</q-item-section>
                 </q-item>
                 <q-item to="/borrow/oldLent" clickable v-ripple>
-                  <q-item-section>Historique des prêts</q-item-section>
+                  <q-item-section>{{ $getTexts('lent').histo }}</q-item-section>
                 </q-item>
               </q-list>
           </q-expansion-item>
@@ -59,11 +62,17 @@
             <q-item-section avatar>
               <q-icon name="verified_user" />
             </q-item-section>
-            <q-item-section>Administration</q-item-section>
+            <q-item-section>{{ $getTexts('admin') }}</q-item-section>
           </q-item>
       </q-list>
-      <h5>Médiathèque</h5>
+      <h5>{{ $getTexts('allItems') }}</h5>
       <q-list separator>
+        <q-item clickable to="/search">
+            <q-item-section avatar>
+              <q-icon name="location_searching" />
+            </q-item-section>
+            <q-item-section>{{ $getTexts('searchItems') }}</q-item-section>
+          </q-item>
           <q-expansion-item 
               v-for="main in categories" 
               :key="main.category_id"
