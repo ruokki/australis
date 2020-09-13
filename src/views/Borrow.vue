@@ -303,7 +303,15 @@ export default {
             'getToken'
         ]),
         getTitle: function() {
-            return this.titles[this.type];
+            if(this.type === 'borrower') {
+                return this.$getTexts('borrow', 'Menu');
+            }
+            else if(this.type === 'lender') {
+                return this.$getTexts('lent', 'Menu').running;
+            }
+            else {
+                return this.$getTexts('lent', 'Menu').histo;
+            }
         },
         getHelp: function() {
             return this.help[this.type];
@@ -480,11 +488,6 @@ export default {
             actualEnd: "",
             renewDate: "",
 
-            titles: {
-                borrower: "Mes emprunts",
-                lender: "Demandes de prêts",
-                oldLent: "Historique des prêts",
-            },
             help: {
                 borrower: "Fonctionnement des emprunts",
                 lender: "Fonctionnement des prêts",

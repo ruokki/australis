@@ -131,12 +131,14 @@ export default {
         ]),
         // Titre de la page
         title: function() {
+            let target = "";
             if(this.type === 'collection') {
-                return "Création d'une collection";
+                target = "createMulti";
             }
             else {
-                return "Création d'un item";
+                target = "createOne";
             }
+            return this.$getTexts('userItems', 'Menu')[target];
         },
         // Liste des catégories disponibles
         categories: function() {

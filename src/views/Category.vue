@@ -30,7 +30,7 @@ export default {
         ]),
         fullCategory: function() {
             if(this.main == 'mine') {
-                return 'Mes items';
+                return this.$getTexts('userItems', 'Menu').list;
             }
             else {
                 return this.mainName + " - " + this.subName;
